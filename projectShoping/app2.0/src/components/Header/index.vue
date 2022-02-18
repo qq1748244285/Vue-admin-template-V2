@@ -10,7 +10,7 @@
             <span>请</span>
             <!-- 声明式导航 -->
             <router-link to="/login">登录</router-link>
-            <router-link  to="register" class="register">免费注册</router-link>
+            <router-link to="register" class="register">免费注册</router-link>
           </p>
         </div>
         <div class="typeList">
@@ -35,11 +35,16 @@
       <div class="searchArea">
         <form action="###" class="searchForm">
           <input
+            v-model="inputVal"
             type="text"
             id="autocomplete"
             class="input-error input-xxlarge"
           />
-          <button class="sui-btn btn-xlarge btn-danger" type="button" @click="jumpSearch">
+          <button
+            class="sui-btn btn-xlarge btn-danger"
+            type="button"
+            @click="jumpSearch"
+          >
             搜索
           </button>
         </form>
@@ -50,12 +55,26 @@
 
 <script>
 export default {
-  methods:{
-    jumpSearch(){
-      console.log('获取用户输入内容，跳转search');
-      this.$router.push('/search');
-    }
-  }
+  data() {
+    return {
+      inputVal: "",
+    };
+  },
+  methods: {
+    jumpSearch() {
+      console.log(this.inputVal, "inputVal");
+      this.$router.push({
+        name: "search",
+        params:{
+          val:this.inputVal||undefined
+        },
+        query:{
+          qqq:this.inputVal.toUpperCase()
+        }
+      });
+
+    },
+  },
 };
 </script>
 
