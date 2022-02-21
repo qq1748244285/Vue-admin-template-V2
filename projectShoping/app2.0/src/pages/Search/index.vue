@@ -1,8 +1,7 @@
 <template>
   <div>
-      我是搜索---{{$route.params.val}}
-      我是搜索---{{$route.query.qqq}}
-      我是props---{{val}}
+    <!-- search -->
+    <TypeNav></TypeNav>
   </div>
 </template>
 
@@ -10,8 +9,7 @@
 export default {
   mounted(){
     console.log(this.$route,'routete')
-  },
-  props:['val']
+  }, 
 }
 </script>
 

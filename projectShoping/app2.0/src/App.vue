@@ -19,6 +19,10 @@ export default {
   components:{
     Header,
     Footer
+  },
+  mounted(){
+    console.log('我是根组件');
+     this.$store.dispatch("actions_categoryList");
   }
 }
 </script>
