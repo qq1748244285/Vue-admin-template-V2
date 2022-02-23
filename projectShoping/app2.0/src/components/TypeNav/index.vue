@@ -189,7 +189,7 @@ export default {
       left: 0;
       top: 45px;
       width: 210px;
-      height: 461px;
+      height: auto;
       background: #fafafa;
       z-index: 999;
       .all-sort-list2 {
@@ -278,25 +278,26 @@ export default {
     //过度动画开始状态
     .sort-enter {
       height: 0px;
+      overflow: hidden;
     }
     //离开时
     .sort-enter-to {
-      // height: 461px;
     }
     //速率等动画
     .sort-enter-active {
-      transition: all 0.5s linear;
+      transition: all 2s linear;
     }
 
     .sort-leave {
-      // height: 461px;
     }
 
     .sort-leave-to {
       height: 0;
+      overflow: hidden;
+
     }
     .sort-leave-active {
-      transition: all 0.5s linear;
+      transition: all 2s linear;
     }
   }
 }

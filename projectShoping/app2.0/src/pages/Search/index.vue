@@ -54,23 +54,27 @@
           <div class="sui-navbar">
             <div class="navbar-inner filter">
               <ul class="sui-nav">
-                <li class="active">
-                  <a href="#">综合</a>
+                <li :class="{ active: isActive }" @click="ChangeActive(1)">
+                  <a
+                    >综合
+                    <span
+                      v-show="isActive"
+                      class="iconfont"
+                      :class="isDown ? 'icon-arrowdown' : 'icon-arrowup'"
+                    >
+                    </span>
+                  </a>
                 </li>
-                <li>
-                  <a href="#">销量</a>
-                </li>
-                <li>
-                  <a href="#">新品</a>
-                </li>
-                <li>
-                  <a href="#">评价</a>
-                </li>
-                <li>
-                  <a href="#">价格⬆</a>
-                </li>
-                <li>
-                  <a href="#">价格⬇</a>
+                <li :class="{ active: !isActive }" @click="ChangeActive(2)">
+                  <a
+                    >价格
+                    <span
+                      v-show="!isActive"
+                      class="iconfont"
+                      :class="isDown ? 'icon-arrowdown' : 'icon-arrowup'"
+                    >
+                    </span>
+                  </a>
                 </li>
               </ul>
             </div>
@@ -172,7 +176,7 @@ export default {
         category3Id: "",
         categoryName: "",
         keyword: "",
-        order: "",
+        order: "1:desc", //默认 综合排序-降序
         pageNo: 1,
         pageSize: 10,
         props: [],
@@ -196,8 +200,33 @@ export default {
   },
   computed: {
     ...mapGetters(["goodsList", "trademarkList", "attrsList"]),
+    isActive() {
+      return this.SearchParams.order.indexOf("1") != -1;
+    },
+    isDown() {
+      return this.SearchParams.order.indexOf("desc") != -1;
+    },
   },
   methods: {
+    ChangeActive(curr) {
+      let Order = this.SearchParams.order;
+      let Flag = this.SearchParams.order.split(":")[0]; //拿到所选项;
+      let Sort = this.SearchParams.order.split(":")[1]; //拿到所选项;
+      console.log(Order, "order");
+      console.log(Flag, "Flag");
+      console.log(Sort, "Sort");
+      console.log(curr, "curr");
+      let newOrder = "";
+      if (curr == Flag) {
+        newOrder = `${curr}:${Sort == "desc" ? "asc" : "desc"}`;
+        this.SearchParams.order = newOrder;
+      } else {
+        console.log("切换了所选项");
+        newOrder = `${curr}:desc`;
+        this.SearchParams.order = newOrder;
+      }
+      this.getApiSearch();
+    },
     getAttrValFromChildren(item, name) {
       let str = `${item.attrId}:${name}:${item.attrName}`;
       //数组去重
