@@ -7,6 +7,7 @@
         <!-- 过度动画 -->
         <transition name="sort">
           <div class="sort" v-show="show">
+            <!-- 事件委托 -->
             <div class="all-sort-list2" @click="jumpSearch">
               <div
                 class="item"
@@ -96,7 +97,6 @@ export default {
     } else {
       this.show = true;
     }
-   
   },
   computed: {
     ...mapState({
@@ -117,8 +117,8 @@ export default {
     },
     jumpSearch(event) {
       let element = event.target;
-      let { cname, c1id, c2id, c3id } = element.dataset;
-      //只有点击的是a标签拥有cname才进行跳转search页
+      let { cname, c1id, c2id, c3id } = element.dataset; 
+      //只有点击拥有自定义属性的元素才进行跳转
       if (cname) {
         let local = {
           name: "search",
@@ -135,6 +135,12 @@ export default {
         if (c3id) {
           local.query.category3Id = c3id;
         }
+
+        //如果路由跳转时params有参数也需要整理携带
+        if (this.$route.params) {
+          local.params = this.$route.params;
+        }
+
         console.log(local, "query整理参数");
         //跳转search
         this.$router.push(local);
@@ -270,30 +276,28 @@ export default {
       }
     }
     //过度动画开始状态
-    .sort-enter{
+    .sort-enter {
       height: 0px;
-
     }
     //离开时
-    .sort-enter-to{
+    .sort-enter-to {
       // height: 461px;
     }
     //速率等动画
-    .sort-enter-active{
-      transition: all .1s linear;
+    .sort-enter-active {
+      transition: all 0.5s linear;
     }
 
-    .sort-leave{
+    .sort-leave {
       // height: 461px;
     }
 
-    .sort-leave-to{
+    .sort-leave-to {
       height: 0;
     }
-    .sort-leave-active{
-      transition: all .1s linear;
+    .sort-leave-active {
+      transition: all 0.5s linear;
     }
-
   }
 }
 </style>

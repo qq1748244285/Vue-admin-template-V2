@@ -43,7 +43,7 @@ const routes = [
     }
   },
   {
-    path: '/search/:val?',
+    path: '/search/:keyword?',
     component: Search,
     props: true,
     meta: {

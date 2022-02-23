@@ -35,7 +35,7 @@
       <div class="searchArea">
         <form action="###" class="searchForm">
           <input
-            v-model="inputVal"
+            v-model="keyword"
             type="text"
             id="autocomplete"
             class="input-error input-xxlarge"
@@ -55,24 +55,32 @@
 
 <script>
 export default {
+  name: "Header",
   data() {
     return {
-      inputVal: "",
+      keyword: "",
     };
+  },
+  mounted(){
+    //通过$bus监听到兄弟组件触发的清除事件 则进行keyword的清空
+    this.$bus.$on('clearKeyWord',(params)=>{
+      console.log('params测试传参',params)
+      this.keyword = ''; 
+    })
   },
   methods: {
     jumpSearch() {
-      console.log(this.inputVal, "inputVal");
-      this.$router.push({
+      const local = {
         name: "search",
-        params:{
-          val:this.inputVal||undefined
+        params: {
+          keyword: this.keyword,
         },
-        query:{
-          qqq:this.inputVal.toUpperCase()
-        }
-      });
-
+      };
+      console.log(this.keyword, "keyWord");
+      if (this.$route.query) {
+        local.query = this.$route.query;
+      } 
+      this.$router.push(local);
     },
   },
 };
