@@ -6,6 +6,9 @@ import store from './store'
 //注册三级联动为全局组件
 import TypeNav from '@/components/TypeNav'
 
+//注册分页器为全局组件 
+import Pagintion from '@/components/Pagination'
+
 //执行mock 
 import '@/mock/mockServe'
 
@@ -14,6 +17,7 @@ import 'swiper/css/swiper.css'
 
 //名称 及 组件
 Vue.component(TypeNav.name, TypeNav);
+Vue.component(Pagintion.name, Pagintion);
 
 Vue.config.productionTip = false
 

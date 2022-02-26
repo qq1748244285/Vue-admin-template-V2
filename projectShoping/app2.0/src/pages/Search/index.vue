@@ -124,35 +124,14 @@
               </li>
             </ul>
           </div>
-          <div class="fr page">
-            <div class="sui-pagination clearfix">
-              <ul>
-                <li class="prev disabled">
-                  <a href="#">«上一页</a>
-                </li>
-                <li class="active">
-                  <a href="#">1</a>
-                </li>
-                <li>
-                  <a href="#">2</a>
-                </li>
-                <li>
-                  <a href="#">3</a>
-                </li>
-                <li>
-                  <a href="#">4</a>
-                </li>
-                <li>
-                  <a href="#">5</a>
-                </li>
-                <li class="dotted"><span>...</span></li>
-                <li class="next">
-                  <a href="#">下一页»</a>
-                </li>
-              </ul>
-              <div><span>共10页&nbsp;</span></div>
-            </div>
-          </div>
+          <!-- 分页 -->
+          <Pagination
+            @getPageNo="getPageNo"
+            :pageNo="SearchParams.pageNo"
+            :pageSize="SearchParams.pageSize"
+            :total="total"
+            :continuse="5"
+          />
         </div>
       </div>
     </div>
@@ -160,7 +139,7 @@
 </template>
 
 <script>
-import { mapGetters } from "vuex";
+import { mapGetters, mapState } from "vuex";
 
 import SearchSelector from "./SearchSelector/SearchSelector";
 export default {
@@ -178,11 +157,17 @@ export default {
         keyword: "",
         order: "1:desc", //默认 综合排序-降序
         pageNo: 1,
-        pageSize: 10,
+        pageSize: 3,
         props: [],
         trademark: "",
       },
       searchBread: [],
+      pagesInfo: {
+        pageNo: 27,
+        pageSize: 3,
+        total: 91,
+        continuse: 5, //分页页码个数 一般是奇数 5|7
+      },
     };
   },
   beforeMount() {},
@@ -199,6 +184,9 @@ export default {
     },
   },
   computed: {
+    ...mapState({
+      total: (state) => state.Search.searchList.total,
+    }),
     ...mapGetters(["goodsList", "trademarkList", "attrsList"]),
     isActive() {
       return this.SearchParams.order.indexOf("1") != -1;
@@ -208,6 +196,11 @@ export default {
     },
   },
   methods: {
+    getPageNo(i) {
+      console.log(i, "获取点击的pageNo");
+      this.SearchParams.pageNo = i;
+      this.getApiSearch();
+    },
     ChangeActive(curr) {
       let Order = this.SearchParams.order;
       let Flag = this.SearchParams.order.split(":")[0]; //拿到所选项;
