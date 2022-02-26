@@ -48,7 +48,7 @@ export default {
     totalPage() {
       return Math.ceil(this.total / this.pageSize);
     },
-    //计算出连续的页码的启示数字与结束数字
+    //计算出连续的页码的起始数字与结束数字
     StartNumAndEndNum() {
       //解构
       let { totalPage } = this;
@@ -79,6 +79,7 @@ export default {
   },
   methods: {
     clickNum(item) {
+      //触发自定义事件传入点击的页码
       this.$emit("getPageNo", item);
     },
   },
