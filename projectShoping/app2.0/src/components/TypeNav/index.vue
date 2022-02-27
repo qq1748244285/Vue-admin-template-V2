@@ -92,7 +92,10 @@ export default {
   },
   mounted() {
     console.log("Typenav  生命周期");
-    if (this.$route.path.search("/search") != -1) {
+    if (
+      this.$route.path.search("/search") != -1 ||
+      this.$route.path.search("/details") != -1
+    ) {
       this.show = false;
     } else {
       this.show = true;
@@ -105,19 +108,24 @@ export default {
   },
   methods: {
     isShowNav(bool) {
+      console.log(bool, "bool");
       if (!bool) {
         this.current = -1;
       }
-      if (!bool && this.$route.path.search("/search") != -1) {
-        this.show = false;
+      let path = this.$route.path;
+      //如果是在主页 则不进行任何操作
+      if (path == "/home") {
+        return;
+      }else{
+      //否则在其他页则进行展示隐藏
+        this.show = bool;
       }
-      if (bool && this.$route.path.search("/search") != -1) {
-        this.show = true;
-      }
+
+
     },
     jumpSearch(event) {
       let element = event.target;
-      let { cname, c1id, c2id, c3id } = element.dataset; 
+      let { cname, c1id, c2id, c3id } = element.dataset;
       //只有点击拥有自定义属性的元素才进行跳转
       if (cname) {
         let local = {
@@ -294,7 +302,6 @@ export default {
     .sort-leave-to {
       height: 0;
       overflow: hidden;
-
     }
     .sort-leave-active {
       transition: all 2s linear;

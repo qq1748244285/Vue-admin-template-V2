@@ -7,10 +7,13 @@ Vue.use(Vuex)
 import Home from './Home'
 //引入Search_Vuex
 import Search from './Search'
+//引入Details
+import Details from './Details'
 //模块化vuex
 export default new Vuex.Store({
   modules: {
     Home,
-    Search
+    Search,
+    Details
   }
 })

@@ -12,3 +12,6 @@ export const GetFloorList = () => r({ url: '/floor' });
 
 //获取search数据 
 export const GetSearchInfo = (data = {}) => r({ url: 'list', method: 'post', data })
+
+//获取详情页商品数据
+export const GetGoodsInfo = (skuid) => r({ url: `/item/${skuid}` })
