@@ -6,7 +6,11 @@
         v-for="(imageItem, index) of imageList"
         :key="imageItem.id"
       >
-        <img :src="imageItem.imgUrl" />
+        <img
+          :class="{ active: curr == index }"
+          @click="checkImage(index)"
+          :src="imageItem.imgUrl"
+        />
       </div>
     </div>
     <div class="swiper-button-next"></div>
@@ -33,12 +37,21 @@ export default {
             el: ".swiper-scrollbar",
           },
           slidesPerView: 3,
-          grid: {
-            fill: "column",
-            rows: 1,
-          },
+          slidesPerGroup: 1,
         });
       });
+    },
+  },
+  data() {
+    return {
+      curr: 0,
+    };
+  },
+  methods: {
+    checkImage(i) {
+      this.curr = i;
+      //通知兄弟组件切换图片
+      this.$bus.$emit('ChangeImage',i);
     },
   },
 };
@@ -46,7 +59,7 @@ export default {
 
 <style lang="less" scoped>
 .swiper-container {
-  height: 56px;
+  height: 60px;
   width: 412px;
   box-sizing: border-box;
   padding: 0 12px;
@@ -63,16 +76,6 @@ export default {
       width: 50px;
       height: 50px;
       display: block;
-
-      &.active {
-        border: 2px solid #f60;
-        padding: 1px;
-      }
-
-      &:hover {
-        border: 2px solid #f60;
-        padding: 1px;
-      }
     }
   }
 
@@ -98,6 +101,10 @@ export default {
     &::after {
       font-size: 12px;
     }
+  }
+
+  .active {
+    border: 2px solid #f60 !important;
   }
 }
 </style>

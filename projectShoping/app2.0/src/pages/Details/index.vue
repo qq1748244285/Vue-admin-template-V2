@@ -87,7 +87,7 @@
               >
                 <dt class="title">{{ spuSaleAttrListItem.saleAttrName }}</dt>
                 <dd
-                  @click="ChangeActive(spuSaleAttrListItem,sitem)"
+                  @click="changeActive(spuSaleAttrListItem, sitem)"
                   v-for="(
                     sitem, sindex
                   ) of spuSaleAttrListItem.spuSaleAttrValueList"
@@ -101,11 +101,21 @@
             </div>
             <div class="cartWrap">
               <div class="controls">
-                <input autocomplete="off" class="itxt" />
-                <a href="javascript:" class="plus">+</a>
-                <a href="javascript:" class="mins">-</a>
+                <input
+                  @change="changeInput"
+                  v-model="val"
+                  autocomplete="off"
+                  class="itxt"
+                />
+                <a href="javascript:" class="plus" @click="val++">+</a>
+                <a
+                  href="javascript:"
+                  class="mins"
+                  @click="val > 1 ? val-- : (val = 1)"
+                  >-</a
+                >
               </div>
-              <div class="add">
+              <div class="add" @click="addCart">
                 <a href="javascript:">加入购物车</a>
               </div>
             </div>
@@ -352,7 +362,9 @@ import { mapState, mapGetters } from "vuex";
 export default {
   name: "Detail",
   data() {
-    return {};
+    return {
+      val: 1,
+    };
   },
   mounted() {
     let id = this.$route.params.skuid;
@@ -375,13 +387,41 @@ export default {
     Zoom,
   },
   methods: {
-    ChangeActive(citem,item) {
-      console.log(citem,'citem')
-      console.log(item,'xitem');
-      citem.spuSaleAttrValueList.forEach(xitem=>{
-        xitem.isChecked = '0';
-      })
-      item.isChecked = '1';
+    changeInput(e) {
+      console.log(e.target.value, "11");
+      let val = e.target.value * 1;
+      //检测非数字则初始化为1 || 小于1则初始化为1
+      if (isNaN(val) || val < 1) {
+        this.val = 1;
+      } else {
+        //大于1且不为小数
+        this.val = parseInt(val);
+      }
+    },
+    changeActive(citem, item) {
+      console.log(citem, "citem");
+      console.log(item, "xitem");
+      citem.spuSaleAttrValueList.forEach((xitem) => {
+        xitem.isChecked = "0";
+      });
+      item.isChecked = "1";
+    },
+    async addCart() {
+      try {
+        console.log("加入购物车..");
+        let skuId = this.$route.params.skuid;
+        let skuNum = this.val;
+        let r = await this.$store.dispatch("actions_AddOrUpdateShopCart", {
+          skuId,
+          skuNum,
+        }); 
+        //存入session
+        sessionStorage.setItem("skuInfo", JSON.stringify(this.skuInfo));
+
+        this.$router.push({ name: "addcartsuccess", query: { skuNum } });
+      } catch (e) {
+        alert(e);
+      }
     },
   },
 };

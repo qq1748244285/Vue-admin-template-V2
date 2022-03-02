@@ -5,7 +5,8 @@ import Search from '@/pages/Search'
 import Register from '@/pages/Register'
 import Login from '@/pages/Login'
 import Details from '@/pages/Details'
-
+import AddCartSuccess from '@/pages/AddCartSuccess'
+import ShopCart from '@/pages/ShopCart'
 export default [
     {
         path: '/',
@@ -49,6 +50,24 @@ export default [
         }
     },
     {
+        path: '/addcartsuccess',
+        component: AddCartSuccess,
+        name: 'addcartsuccess',
+        meta: {
+            showFooter: true,
+            title: '添加购物车'
+        }
+    },
+    {
+        path: '/shopcart',
+        component: ShopCart,
+        name: 'ShopCart',
+        meta: {
+            showFooter: true,
+            title: '购物车'
+        }
+    },
+    {
         path: '/about',
         name: 'About',
         // route level code-splitting
@@ -57,3 +76,4 @@ export default [
         // component: () => import(/* webpackChunkName: "about" */ '../views/About.vue')
     }
 ]
+

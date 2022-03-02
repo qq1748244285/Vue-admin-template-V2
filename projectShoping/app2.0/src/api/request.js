@@ -3,6 +3,8 @@ import axios from 'axios'
 import nprogress from 'nprogress'
 //引入进度条插件样式
 import 'nprogress/nprogress.css';
+//引入store
+import store from '@/store';
 
 //创建一个axios 实例  并配置实例对象属性
 const requests = axios.create({
@@ -10,13 +12,18 @@ const requests = axios.create({
     timeout: 5000, //请求超时时间 毫秒    
 })
 
+
 //请求拦截器
 requests.interceptors.request.use((config) => {
-    //config 配置对象 包含请求头headers 
-    
+    //config 配置对象 包含请求头headers
+    let uuid_token = store.state.Details.uuid_token || '';
+    if (uuid_token) {
+        //userTempId 和后台协商好的key
+        config.headers.userTempId = uuid_token;
+    }
     //进度条开始加载
     nprogress.start();
-    
+
     return config
 })
 

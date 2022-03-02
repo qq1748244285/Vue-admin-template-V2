@@ -15,3 +15,15 @@ export const GetSearchInfo = (data = {}) => r({ url: 'list', method: 'post', dat
 
 //获取详情页商品数据
 export const GetGoodsInfo = (skuid) => r({ url: `/item/${skuid}` })
+
+//更新购物车产品
+export const AddOrUpdateShopCart = (skuId, skuNum) => r({ url: `/cart/addToCart/${skuId}/${skuNum}`, method: 'post' })
+
+//获取购物车列表数据
+export const GetCartList = () => r({ url: '/cart/cartList' });
+
+//删除商品
+export const DelGoods = (skuId) => r({ url: `/cart/deleteCart/${skuId}`, method: 'delete' })
+
+//更改商品选中状态
+export const ChangeGoodsCheck = (skuId, isChecked) => r({ url: `/cart/checkCart/${skuId}/${isChecked}`})

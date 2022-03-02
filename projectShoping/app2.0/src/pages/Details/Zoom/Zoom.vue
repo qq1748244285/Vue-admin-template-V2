@@ -1,11 +1,11 @@
 <template>
   <div class="spec-preview">
     <img :src="imgItem.imgUrl" />
-    <div class="event"></div>
+    <div @mousemove="handler" class="event"></div>
     <div class="big">
-      <img :src="imgItem.imgUrl" />
+      <img :src="imgItem.imgUrl" ref="big" />
     </div>
-    <div class="mask"></div>
+    <div class="mask" ref="mask"></div>
   </div>
 </template>
 
@@ -15,8 +15,51 @@ export default {
   props: ["imageList"],
   computed: {
     imgItem() {
-      return this.imageList[0] || {};
+      return this.imageList[this.curr] || {};
     },
+  },
+  data() {
+    return {
+      curr: 0,
+    };
+  },
+  methods: {
+    handler(e) {
+      // console.log(e,'eee')
+      let mask = this.$refs.mask;
+      let big = this.$refs.big;
+
+      let left = e.offsetX - mask.offsetWidth / 2;
+      let top = e.offsetY - mask.offsetHeight / 2;
+      if (left < 0) {
+        left = 0;
+      }
+
+      if (left > mask.offsetWidth) {
+        left = mask.offsetWidth;
+      }
+
+      if (top < 0) {
+        top = 0;
+      }
+
+      if (top > mask.offsetHeight) {
+        top = mask.offsetHeight;
+      }
+
+      mask.style.left = left + "px";
+      mask.style.top = top + "px";
+
+      big.style.left = -2 * left+'px'
+      big.style.top = -2 * top+'px'
+
+    },
+  },
+  mounted() {
+    this.$bus.$on("ChangeImage", (i) => {
+      console.log(i, "获取兄弟..");
+      this.curr = i;
+    });
   },
 };
 </script>
