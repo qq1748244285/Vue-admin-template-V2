@@ -5,6 +5,8 @@ import nprogress from 'nprogress'
 import 'nprogress/nprogress.css';
 //引入store
 import store from '@/store';
+//获取token
+import { GetToken } from '@/utils/token'
 
 //创建一个axios 实例  并配置实例对象属性
 const requests = axios.create({
@@ -17,6 +19,12 @@ const requests = axios.create({
 requests.interceptors.request.use((config) => {
     //config 配置对象 包含请求头headers
     let uuid_token = store.state.Details.uuid_token || '';
+    //token令牌
+    let token = GetToken() || '';
+    //存入headres
+    if (token) {
+        config.headers.token = token;
+    }
     if (uuid_token) {
         //userTempId 和后台协商好的key
         config.headers.userTempId = uuid_token;

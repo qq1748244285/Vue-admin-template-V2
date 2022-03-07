@@ -26,4 +26,19 @@ export const GetCartList = () => r({ url: '/cart/cartList' });
 export const DelGoods = (skuId) => r({ url: `/cart/deleteCart/${skuId}`, method: 'delete' })
 
 //更改商品选中状态
-export const ChangeGoodsCheck = (skuId, isChecked) => r({ url: `/cart/checkCart/${skuId}/${isChecked}`})
+export const ChangeGoodsCheck = (skuId, isChecked) => r({ url: `/cart/checkCart/${skuId}/${isChecked}` })
+
+//获取验证码
+export const getCode = (phone) => r({ url: `/user/passport/sendCode/${phone}` });
+
+//用户注册
+export const registerUser = (data) => r({ url: '/user/passport/register', method: "post", data })
+
+//用户登录
+export const userLogin = (data) => r({ url: '/user/passport/login', method: 'post', data })
+
+//自动登录
+export const autoLogin = () => r({ url: '/user/passport/auth/getUserInfo' })
+
+//退出登录
+export const loginOut = ()=>r({url:'/user/passport/logout'})

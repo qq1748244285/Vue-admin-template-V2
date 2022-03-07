@@ -60,7 +60,7 @@
       <div class="select-all">
         <input
           @change="changeAll($event.target.checked)"
-          :checked="isCheckAll"
+          :checked="isCheckAll&&cartInfoList.length>0"
           class="chooseAll"
           type="checkbox"
         />

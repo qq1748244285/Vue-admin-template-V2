@@ -4,7 +4,10 @@
     <div class="sortList clearfix">
       <div class="center">
         <!--banner轮播-->
-        <FloorSwiper v-if="bannerList&&bannerList.length>0" :bannerList="bannerList"></FloorSwiper>
+        <FloorSwiper
+          v-if="bannerList && bannerList.length > 0"
+          :bannerList="bannerList"
+        ></FloorSwiper>
       </div>
       <div class="right">
         <div class="news">
@@ -172,7 +175,7 @@ export default {
           width: 25%;
 
           .list-item {
-            background-image: url("./images/icons.png");
+            background-image: url("~@/assets/image/icons.png");
             width: 61px;
             height: 40px;
             display: block;

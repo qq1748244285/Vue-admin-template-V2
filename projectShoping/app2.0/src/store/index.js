@@ -11,12 +11,15 @@ import Search from './Search'
 import Details from './Details'
 //引入ShopCart
 import ShopCart from './ShopCart'
+//引入user
+import UserLogin from './UserLogin'
 //模块化vuex
 export default new Vuex.Store({
   modules: {
     Home,
     Search,
     Details,
-    ShopCart
+    ShopCart,
+    UserLogin
   }
 })

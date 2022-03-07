@@ -4,7 +4,7 @@
     <!-- 头部的第一行 -->
     <div class="top">
       <div class="container">
-        <div class="loginList">
+        <div class="loginList" v-if="!userInfo.name">
           <p>尚品汇欢迎您！</p>
           <p>
             <span>请</span>
@@ -12,6 +12,10 @@
             <router-link to="/login">登录</router-link>
             <router-link to="register" class="register">免费注册</router-link>
           </p>
+        </div>
+        <div v-else>
+          欢迎{{ userInfo.name }} ~
+          <a @click="loginOut">退出登录</a>
         </div>
         <div class="typeList">
           <a href="###">我的订单</a>
@@ -61,12 +65,12 @@ export default {
       keyword: "",
     };
   },
-  mounted(){
+  mounted() {
     //通过$bus监听到兄弟组件触发的清除事件 则进行keyword的清空
-    this.$bus.$on('clearKeyWord',(params)=>{
-      console.log('params测试传参',params)
-      this.keyword = ''; 
-    })
+    this.$bus.$on("clearKeyWord", (params) => {
+      console.log("params测试传参", params);
+      this.keyword = "";
+    });
   },
   methods: {
     jumpSearch() {
@@ -79,8 +83,21 @@ export default {
       console.log(this.keyword, "keyWord");
       if (this.$route.query) {
         local.query = this.$route.query;
-      } 
+      }
       this.$router.push(local);
+    },
+    async loginOut() {
+      try {
+        let r = await this.$store.dispatch("actions_loginOut");
+        this.$router.push("/home");
+      } catch (err) {
+        alert(err.message);
+      }
+    },
+  },
+  computed: {
+    userInfo() {
+      return this.$store.state.UserLogin.userInfo;
     },
   },
 };

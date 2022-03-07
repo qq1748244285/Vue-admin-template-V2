@@ -33,7 +33,8 @@ export default [
         component: Login,
         meta: {
             showFooter: false
-        }
+        },
+        name:'login'
     },
     {
         path: '/Register',
