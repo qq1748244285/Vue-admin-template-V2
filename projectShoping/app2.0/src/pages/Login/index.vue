@@ -95,8 +95,8 @@ export default {
         };
         phone &&
           password &&
-          (await this.$store.dispatch("actions_userLogin", data));
-        this.$router.push({ path: "/home" });
+          (await this.$store.dispatch("actions_userLogin", data)) &&
+          this.$router.push({ path: "/home" });
       } catch (err) {
         alert(err.message);
       }

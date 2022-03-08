@@ -42,3 +42,9 @@ export const autoLogin = () => r({ url: '/user/passport/auth/getUserInfo' })
 
 //退出登录
 export const loginOut = ()=>r({url:'/user/passport/logout'})
+
+//获取用户收货地址
+export const GetAddressInfo = ()=>r({url:'/user/userAddress/auth/findUserAddressList'})
+
+//获取商品清单
+export const GetOrderInfo = ()=>r({url:'/order/auth/trade'})

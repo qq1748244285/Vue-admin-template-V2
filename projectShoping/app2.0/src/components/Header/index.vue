@@ -91,7 +91,7 @@ export default {
         let r = await this.$store.dispatch("actions_loginOut");
         this.$router.push("/home");
       } catch (err) {
-        alert(err.message);
+        alert('loginOut_formHeader');
       }
     },
   },

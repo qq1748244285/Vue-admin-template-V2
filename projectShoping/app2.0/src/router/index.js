@@ -39,28 +39,37 @@ const router = new VueRouter({
 
 
 
-
+//路由前置守卫
 router.beforeEach(async (to, from, next) => {
   let token = GetToken();
-  let userInfo = store.state.UserLogin.userInfo.name;
-
-
-  if (token && to.name == 'login') {
-    return alert('您已登录无需重复登录!')
-  } else {
+  let name = store.state.UserLogin.userInfo.name;
+  if (token) {
+    //已登录无需重复登陆
+    if (to.path == '/login') {
+      console.log('当前已登录无需再次登录')
+      next('/')
+    }
     //已登录前往其他页面 需要先获取用户信息是否已存在
-    if (userInfo) {
+    if (name) {
       next();
     } else {
       //获取用户信息 然后再进行跳转
       try {
-        store.dispatch("actions_autoLoign");
+        console.log('獲取成功')
+        await store.dispatch("actions_autoLoign");
         next();
       } catch (err) {
-        alert('获取个人信息失败,Token失效!请重新登录');
-        await  store.actions_loginOut('CLEARUSER'); 
-        next('login')
+        console.log('獲取失敗')
+        await store.dispatch('actions_loginOut');
+        next('/login')
       }
+    }
+  } else {
+    //如果未登录 只允许前往首页/登录页/注册页 
+    if (to.path != '/home' && to.path != '/login' && to.path != '/' && to.path != '/register') {
+      next('/login');
+    } else {
+      next();
     }
   }
 })

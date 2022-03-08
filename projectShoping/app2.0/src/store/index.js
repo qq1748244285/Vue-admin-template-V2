@@ -13,6 +13,8 @@ import Details from './Details'
 import ShopCart from './ShopCart'
 //引入user
 import UserLogin from './UserLogin'
+//引入交易
+import Trade from './Trade'
 //模块化vuex
 export default new Vuex.Store({
   modules: {
@@ -20,6 +22,7 @@ export default new Vuex.Store({
     Search,
     Details,
     ShopCart,
-    UserLogin
+    UserLogin,
+    Trade
   }
 })

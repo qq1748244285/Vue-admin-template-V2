@@ -78,7 +78,7 @@
           <i class="summoney">{{ totalPrice }}</i>
         </div>
         <div class="sumbtn">
-          <a class="sum-btn" href="###" target="_blank">结算</a>
+          <a class="sum-btn"   @click="$router.push('/trade')" >结算</a>
         </div>
       </div>
     </div>
@@ -128,7 +128,6 @@ export default {
       try {
         this.$store.dispatch("actions_delGoods", skuId);
         this.getCartList();
-        alert("删除成功!");
       } catch (err) {
         alert(err.message);
       }

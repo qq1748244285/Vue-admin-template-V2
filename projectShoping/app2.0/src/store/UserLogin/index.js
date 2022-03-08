@@ -48,7 +48,7 @@ const actions = {
             SetToken(r.data.token);
             return 'ok'
         } else {
-            return Promise.reject(new Error(r.message))
+            return Promise.reject(new Error('获取token失败'))
         }
     },
     //自动登录 通过headres中的token
@@ -57,7 +57,7 @@ const actions = {
         if (r.code == 200) {
             commit('GETUSERINFO', r.data);
         } else {
-            return Promise.reject(new Error(r.message))
+            return Promise.reject(new Error('获取用户信息失败啊啊 '))
         }
 
     },
@@ -69,7 +69,7 @@ const actions = {
             commit('CLEARUSER');
             return 'ok'
         } else {
-            return Promise.reject(new Error(r.message))
+            return Promise.reject(new Error('跳转登录页'))
         }
     }
 }; //可处理异步
