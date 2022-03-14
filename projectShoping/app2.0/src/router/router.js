@@ -8,10 +8,18 @@ import Details from '@/pages/Details'
 import AddCartSuccess from '@/pages/AddCartSuccess'
 import ShopCart from '@/pages/ShopCart'
 import Trade from '@/pages/Trade'
+import Pay from '@/pages/Pay'
 export default [
     {
         path: '/',
         redirect: '/home',
+    },
+    {
+        path:'/pay',
+        component:Pay,
+        meta:{
+            showFooter: true
+        }
     },
     {
         path: '/home',

@@ -1,11 +1,11 @@
 module.exports = {
-    lintOnSave: false,//closeEslin
+    lintOnSave: false,//closeEslin //关闭eslink 不需要就删除
     //proxy代理
     devServer: {
-        inline:true, //热更新
+        inline:true, //热更新 改了代码 浏览器自动刷新
         proxy: {
             '/api':{
-                target:'http://39.98.123.211'
+                target:'http://39.98.123.211' //填写你服务器的地址
             }
         },
     },

@@ -41,10 +41,13 @@ export const userLogin = (data) => r({ url: '/user/passport/login', method: 'pos
 export const autoLogin = () => r({ url: '/user/passport/auth/getUserInfo' })
 
 //退出登录
-export const loginOut = ()=>r({url:'/user/passport/logout'})
+export const loginOut = () => r({ url: '/user/passport/logout' })
 
 //获取用户收货地址
-export const GetAddressInfo = ()=>r({url:'/user/userAddress/auth/findUserAddressList'})
+export const GetAddressInfo = () => r({ url: '/user/userAddress/auth/findUserAddressList' })
 
 //获取商品清单
-export const GetOrderInfo = ()=>r({url:'/order/auth/trade'})
+export const GetOrderInfo = () => r({ url: '/order/auth/trade' })
+
+//提交订单
+export const suBmitOrder = (tradeNo, data) => r({ url: `/order/auth/submitOrder?tradeNo=${tradeNo}`, method: 'post', data })
