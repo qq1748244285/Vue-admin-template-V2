@@ -9,16 +9,55 @@ import AddCartSuccess from '@/pages/AddCartSuccess'
 import ShopCart from '@/pages/ShopCart'
 import Trade from '@/pages/Trade'
 import Pay from '@/pages/Pay'
+import PaySuccess from '@/pages/PaySuccess'
+import center from '@/pages/Center'
+import myOrder from '@/pages/Center/myOrder'
+import groupOrder from '@/pages/Center/groupOrder'
 export default [
     {
         path: '/',
         redirect: '/home',
     },
     {
-        path:'/pay',
-        component:Pay,
-        meta:{
+        path: '/paysuccess',
+        component: PaySuccess,
+        meta: {
             showFooter: true
+        }, 
+    },
+    {
+        path: '/center',
+        component: center,
+        meta: {
+            showFooter: true
+        },
+        children: [
+            {
+                path: '/center',
+                redirect: '/center/myorder' //如果访问center 重定向到myorder
+            },
+            {
+                path: 'myorder',
+                component: myOrder,
+            },
+            {
+                path: 'grouporder',
+                component: groupOrder,
+            },
+        ]
+    },
+    {
+        path: '/pay/:orderId?',
+        component: Pay,
+        meta: {
+            showFooter: true
+        },
+        beforeEnter:(to,from,next)=>{
+            if(from.path=='/trade'){
+                next();
+            }else{
+                next(false);
+            }
         }
     },
     {
@@ -43,7 +82,7 @@ export default [
         meta: {
             showFooter: false
         },
-        name:'login'
+        name: 'login'
     },
     {
         path: '/Register',
@@ -86,9 +125,18 @@ export default [
         // component: () => import(/* webpackChunkName: "about" */ '../views/About.vue')
     },
     {
-        path:'/trade',
-        component:Trade,
-        name:'Trade'
+        path: '/trade',
+        component: Trade,
+        name: 'Trade',
+        //只有在shopcart购物车页才可以跳到这个页面来
+        beforeEnter: (to, from, next) => {
+            console.log(from, 'from..')
+            if (from.path == "/shopcart") {
+                next();
+            } else {
+                next(false);
+            }
+        }
     }
 ]
 

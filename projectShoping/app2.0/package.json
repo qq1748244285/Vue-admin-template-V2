@@ -9,11 +9,13 @@
   "dependencies": {
     "axios": "^0.26.0",
     "core-js": "^3.6.5",
+    "element-ui": "^2.15.6",
     "lib-flexible": "^0.3.2",
     "lodash": "^4.17.21",
     "mockjs": "^1.1.0",
     "nprogress": "^0.2.0",
     "postcss-px2rem-exclude": "0.0.6",
+    "qrcode": "^1.5.0",
     "swiper": "^5.4.5",
     "vue": "^2.6.11",
     "vue-cli": "^2.9.6",
@@ -25,6 +27,7 @@
     "@vue/cli-plugin-router": "~4.5.0",
     "@vue/cli-plugin-vuex": "~4.5.0",
     "@vue/cli-service": "~4.5.0",
+    "babel-plugin-component": "^1.1.1",
     "less": "^3.0.4",
     "less-loader": "^5.0.0",
     "vue-template-compiler": "^2.6.11"

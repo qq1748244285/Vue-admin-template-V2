@@ -2,8 +2,6 @@ import Vue from 'vue'
 import App from './App.vue'
 import router from './router'
 import store from './store'
-
-
 //引入自适应插件
 import 'lib-flexible'
 
@@ -21,11 +19,14 @@ import 'swiper/css/swiper.css'
 
 //统一引入api文件中的所有抛出项 并命名为Api
 import * as Api from '@/api'
+ 
+//按需加载elementUi
+import './utils/ui_com'
 
-//名称 及 组件
+
+//名称 及 组件 全局注册
 Vue.component(TypeNav.name, TypeNav);
-Vue.component(Pagintion.name, Pagintion);
-
+Vue.component(Pagintion.name, Pagintion);  
 Vue.config.productionTip = false
 
 new Vue({

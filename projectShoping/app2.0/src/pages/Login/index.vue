@@ -93,10 +93,13 @@ export default {
           phone,
           password,
         };
-        phone &&
-          password &&
-          (await this.$store.dispatch("actions_userLogin", data)) &&
+        if (this.$route.query.redirect) {
+          phone &&
+            password &&
+            (await this.$store.dispatch("actions_userLogin", data))&&this.$router.push(this.$route.query.redirect);
+        } else {
           this.$router.push({ path: "/home" });
+        }
       } catch (err) {
         alert(err.message);
       }

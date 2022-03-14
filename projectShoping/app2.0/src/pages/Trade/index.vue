@@ -105,7 +105,7 @@
       </div>
     </div>
     <div class="sub clearFix">
-      <a class="subBtn"  @click="jumpPay">提交订单</a>
+      <a class="subBtn" @click="jumpPay">提交订单</a>
     </div>
   </div>
 </template>
@@ -117,6 +117,7 @@ export default {
   data() {
     return {
       message: "", //买家留言
+      orderId:''
     };
   },
   mounted() {
@@ -131,14 +132,26 @@ export default {
       });
       item.isDefault = 1;
     },
-    jumpPay() {
+    async jumpPay() {
       console.log("jumpPay...");
-      let {tradeNo} = this.getorderinfo;
+      let { tradeNo } = this.getorderinfo;
       let data = {
-        
+        consignee: this.selectAddress.consignee,
+        consigneeTel: this.selectAddress.phoneNum,
+        deliveryAddress: this.selectAddress.fullAddress,
+        paymentWay: "ONLINE",
+        orderComment: this.message,
+        orderDetailList: this.detailArrayList,
+      };
+      let result = await this.$Api.suBmitOrder(tradeNo,data);
+      if(result.code==200){
+        //拿到订单号
+        this.orderId =  result.data;
+        this.$router.push(`/pay?orderId=${this.orderId}`)
+      }else{
+        alert(result.data)
       }
-      this.$Api.suBmitOrder(tradeNo,data);
-
+      console.log(result,'result...');
     },
   },
   computed: {

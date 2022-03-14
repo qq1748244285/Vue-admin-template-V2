@@ -23,7 +23,7 @@ requests.interceptors.request.use((config) => {
     let token = GetToken() || '';
     //存入headres
     if (token) {
-        config.headers.token = token; 
+        config.headers.token = token;
     }
     if (uuid_token) {
         //userTempId 和后台协商好的key

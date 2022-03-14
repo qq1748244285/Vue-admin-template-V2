@@ -65,9 +65,11 @@ router.beforeEach(async (to, from, next) => {
       }
     }
   } else {
+    //如果未登录不可以前往支付相关类页面
+    let toPath = to.path;
     //如果未登录 只允许前往首页/登录页/注册页 
     if (to.path != '/home' && to.path != '/login' && to.path != '/' && to.path != '/register') {
-      next('/login');
+      next('/login?redirect='+toPath);
     } else {
       next();
     }
