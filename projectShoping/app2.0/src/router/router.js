@@ -130,7 +130,6 @@ export default [
         name: 'Trade',
         //只有在shopcart购物车页才可以跳到这个页面来
         beforeEnter: (to, from, next) => {
-            console.log(from, 'from..')
             if (from.path == "/shopcart") {
                 next();
             } else {
