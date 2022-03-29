@@ -9,43 +9,59 @@
         </span>
       </h3>
       <div class="content">
-        <label>手机号:</label>
-        <input v-model="phone" type="text" placeholder="请输入你的手机号" />
-        <span class="error-msg">错误提示信息</span>
+        <ValidationProvider rules="required|mobile" v-slot="{ errors }">
+          <label>手机号:</label>
+          <input placeholder="请输入手机号" v-model="phone" name="phone" />
+          <span class="error-msg">{{ errors[0] }}</span>
+        </ValidationProvider>
       </div>
       <div class="content">
-        <label>验证码:</label>
-        <input v-model="code" type="text" placeholder="请输入验证码" />
-        <button @click="getCode" class="getCode">获取验证码</button>
-        <img
-          ref="code"
-          src="http://182.92.128.115/api/user/passport/code"
-          alt="code"
-        />
-        <span class="error-msg">错误提示信息</span>
+        <ValidationProvider rules="required|code" v-slot="{ errors }">
+          <label>验证码:</label>
+          <input
+            v-model="code"
+            name="code"
+            type="text"
+            placeholder="请输入验证码"
+          />
+          <button @click="getCode" class="getCode">获取验证码</button>
+          <img
+            ref="code"
+            src="http://182.92.128.115/api/user/passport/code"
+            alt="code"
+          />
+          <span class="error-msg">{{ errors[0] }}</span>
+        </ValidationProvider>
       </div>
       <div class="content">
-        <label>登录密码:</label>
-        <input
-          v-model="password"
-          type="password"
-          placeholder="请输入你的登录密码"
-        />
-        <span class="error-msg">错误提示信息</span>
+        <ValidationProvider rules="required|password" v-slot="{ errors }">
+          <label>登录密码:</label>
+          <input
+            v-model="password"
+            type="password"
+            placeholder="请输入你的登录密码"
+            name="password"
+          />
+          <span class="error-msg">{{ errors[0] }}</span>
+        </ValidationProvider>
       </div>
       <div class="content">
         <label>确认密码:</label>
         <input
           v-model="passwordAgain"
-          type="password"
-          placeholder="请输入确认密码"
+          type="passwordAgain"
+          placeholder="请二次输入密码"
         />
-        <span class="error-msg">错误提示信息</span>
+        <span class="error-msg">{{
+          passwordAgain !== password ? "二次输入的密码不符" : ""
+        }}</span>
       </div>
       <div class="controls">
-        <input v-model="isOk" name="m1" type="checkbox" />
-        <span>同意协议并注册《尚品汇用户协议》</span>
-        <span class="error-msg">错误提示信息</span>
+        <ValidationProvider rules="isCheck" v-slot="{ errors }">
+          <input v-model="isOk" name="isCheck" type="checkbox" />
+          <span>同意协议并注册《尚品汇用户协议》</span>
+          <span class="error-msg">{{ errors[0] }}</span>
+        </ValidationProvider>
       </div>
       <div class="btn">
         <button @click="sumbit">完成注册</button>

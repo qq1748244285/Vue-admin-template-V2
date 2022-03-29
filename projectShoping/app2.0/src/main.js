@@ -22,10 +22,11 @@ import * as Api from '@/api'
 
 //按需加载elementUi
 import './utils/ui_com'
+//引入表单验证插件
+import '@/plugins/validate'
 
 //引入懒加载拆件
 import VueLazyload from 'vue-lazyload'
-
 import LoadingGif from '@/assets/1.gif'
 import myPlugins from '@/plugins/myPlugins'
 
@@ -33,8 +34,11 @@ import myPlugins from '@/plugins/myPlugins'
 Vue.use(VueLazyload, {
   loading: LoadingGif //配置loading动画
 });
-//注册自己写的插件
-Vue.use(myPlugins);
+//注册自己写的插件 自定义指令v-upper 将小写英文转为大写
+Vue.use(myPlugins, {
+  name: 'upper'
+});
+//
 
 //名称 及 组件 全局注册
 Vue.component(TypeNav.name, TypeNav);
