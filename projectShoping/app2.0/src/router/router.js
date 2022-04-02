@@ -1,6 +1,5 @@
 
 //引入必要组件
-import Home from '@/pages/Home'
 import Search from '@/pages/Search'
 import Register from '@/pages/Register'
 import Login from '@/pages/Login'
@@ -20,14 +19,14 @@ export default [
     },
     {
         path: '/paysuccess',
-        component: PaySuccess,
+        component: () => import('@/pages/PaySuccess'),
         meta: {
             showFooter: true
-        }, 
+        },
     },
     {
         path: '/center',
-        component: center,
+        component: () => import('@/pages/Center'),
         meta: {
             showFooter: true
         },
@@ -38,38 +37,38 @@ export default [
             },
             {
                 path: 'myorder',
-                component: myOrder,
+                component: () => import('@/pages/Center/myOrder'),
             },
             {
                 path: 'grouporder',
-                component: groupOrder,
+                component: () => import('@/pages/Center/groupOrder'),
             },
         ]
     },
     {
         path: '/pay/:orderId?',
-        component: Pay,
+        component: () => import('@/pages/Pay'),
         meta: {
             showFooter: true
         },
-        beforeEnter:(to,from,next)=>{
-            if(from.path=='/trade'){
+        beforeEnter: (to, from, next) => {
+            if (from.path == '/trade') {
                 next();
-            }else{
+            } else {
                 next(false);
             }
         }
     },
     {
         path: '/home',
-        component: Home,
+        component: () => import('@/pages/Home'),
         meta: {
             showFooter: true
         }
     },
     {
         path: '/search/:keyword?',
-        component: Search,
+        component: () => import('@/pages/Search'),
         props: true,
         meta: {
             showFooter: true
@@ -78,7 +77,7 @@ export default [
     },
     {
         path: '/login',
-        component: Login,
+        component: () => import('@/pages/Login'),
         meta: {
             showFooter: false
         },
@@ -86,21 +85,21 @@ export default [
     },
     {
         path: '/Register',
-        component: Register,
+        component: () => import('@/pages/Register'),
         meta: {
             showFooter: false
         }
     },
     {
         path: '/details/:skuid',
-        component: Details,
+        component: () => import('@/pages/Details'),
         meta: {
             showFooter: true
         }
     },
     {
         path: '/addcartsuccess',
-        component: AddCartSuccess,
+        component: () => import('@/pages/AddCartSuccess'),
         name: 'addcartsuccess',
         meta: {
             showFooter: true,
@@ -109,7 +108,7 @@ export default [
     },
     {
         path: '/shopcart',
-        component: ShopCart,
+        component: () => import('@/pages/ShopCart'),
         name: 'ShopCart',
         meta: {
             showFooter: true,
@@ -126,7 +125,7 @@ export default [
     },
     {
         path: '/trade',
-        component: Trade,
+        component: () => import('@/pages/Trade'),
         name: 'Trade',
         //只有在shopcart购物车页才可以跳到这个页面来
         beforeEnter: (to, from, next) => {
