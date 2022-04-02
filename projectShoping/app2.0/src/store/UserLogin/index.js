@@ -54,6 +54,7 @@ const actions = {
     //自动登录 通过headres中的token
     async actions_autoLoign({ commit }) {
         let r = await autoLogin();
+        console.log(r,'rrrr...')
         if (r.code == 200) {
             commit('GETUSERINFO', r.data);
         } else {

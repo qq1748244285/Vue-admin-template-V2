@@ -43,6 +43,8 @@ const router = new VueRouter({
 router.beforeEach(async (to, from, next) => {
   let token = GetToken();
   let name = store.state.UserLogin.userInfo.name;
+  console.log('路由守卫?');
+  console.log(token,'token')
   if (token) {
     //已登录无需重复登陆
     if (to.path == '/login') {
@@ -55,11 +57,11 @@ router.beforeEach(async (to, from, next) => {
     } else {
       //获取用户信息 然后再进行跳转
       try {
-        console.log('獲取成功')
+        console.log('獲取用户信息成功')
         await store.dispatch("actions_autoLoign");
         next();
       } catch (err) {
-        console.log('獲取失敗')
+        console.log('獲取用户信息失敗')
         await store.dispatch('actions_loginOut');
         next('/login')
       }

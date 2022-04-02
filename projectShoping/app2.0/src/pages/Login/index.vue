@@ -96,9 +96,13 @@ export default {
         if (this.$route.query.redirect) {
           phone &&
             password &&
-            (await this.$store.dispatch("actions_userLogin", data))&&this.$router.push(this.$route.query.redirect);
+            (await this.$store.dispatch("actions_userLogin", data)) &&
+            this.$router.push(this.$route.query.redirect);
         } else {
-          this.$router.push({ path: "/home" });
+          phone &&
+            password &&
+            (await this.$store.dispatch("actions_userLogin", data)) &&
+            this.$router.push("/home");
         }
       } catch (err) {
         alert(err.message);

@@ -1,5 +1,6 @@
 module.exports = {
     lintOnSave: false,//closeEslin //关闭eslink 不需要就删除
+    productionSourceMap:false,
     //proxy代理
     devServer: {
         inline:true, //热更新 改了代码 浏览器自动刷新
