@@ -35,6 +35,12 @@ Vue.use(ElementUI, { locale })
 
 Vue.config.productionTip = false
 
+//将封装的api 挂载到vue原型上方便调用
+import proApi from '@/api/product/index'
+Vue.prototype.$proApi = proApi;
+
+
+
 new Vue({
   el: '#app',
   router,
