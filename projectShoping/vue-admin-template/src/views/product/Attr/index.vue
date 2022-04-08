@@ -1,7 +1,7 @@
 <!--
  * @Author: WenBin
  * @Date: 2022-04-04 13:48:57
- * @LastEditTime: 2022-04-08 16:19:15
+ * @LastEditTime: 2022-04-08 16:32:40
  * @LastEditors: your name
  * @Description: 
  * @FilePath: \vue-admin-template\src\views\product\Attr\index.vue
@@ -166,7 +166,7 @@ export default {
       });
       isRepat ? this.$message.warning('不允许使用重复的名称') : trim(row.valueName) ? row.flag = false : this.$message.warning('请输入属性值名称');
     },
-    SubMitAddOrEdit() {
+    async SubMitAddOrEdit() {
       //属性名及添加项不能为空
       if (trim(this.attrInfo.attrName)) {
         if (this.attrInfo.attrValueList?.length > 0) {
@@ -175,7 +175,12 @@ export default {
             return trim(rule.valueName)
           })
           if (Notempty) {
-            console.log('调用接口..')
+            let result = await this.$proApi.Attr.addAttribute(this.attrInfo);
+            if (result.code == 200) {
+              this.$message.success('新增成功!');
+              this.isShowTable = true ; 
+              this.getListData();
+            }
           } else {
             this.$message.warning('未填写属性名称不允许保存!')
           }
