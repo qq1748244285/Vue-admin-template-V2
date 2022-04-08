@@ -39,6 +39,11 @@ Vue.config.productionTip = false
 import proApi from '@/api/product/index'
 Vue.prototype.$proApi = proApi;
 
+//引入全局组件
+import CategorySelect from '@/components/CategorySelect';
+//全局注册组件
+Vue.component(CategorySelect.name,CategorySelect);
+
 
 
 new Vue({
