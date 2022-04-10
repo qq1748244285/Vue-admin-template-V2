@@ -1,9 +1,20 @@
 import request from '@/utils/request'
 
-export function login(data) {
+export function reqPageSelectSpuList(page,limit,category3Id){
   return request({
-    url: '/admin/acl/index/login',
-    method: 'post',
+    url:`/admin/product/${page}/${limit}`,
+    params:{
+      category3Id
+    }
+  })
+}
+
+
+
+export function reqbaseSaleAttrList(data) {
+  return request({
+    url: '/admin/product/baseSaleAttrList',
     data
   })
 }
+ 

@@ -46,9 +46,10 @@ service.interceptors.response.use(
     const res = response.data
 
     // if the custom code is not 20000 || 200 , it is judged as an error.
+    //如果data是说明 则返回data的报错信息
     if (res.code !== 20000 && res.code !== 200) {
       Message({
-        message: res.message || 'Error',
+        message: Object.prototype.toString.call(res.data) == '[object String]' && res.data || res.message || 'Error',
         type: 'error',
         duration: 5 * 1000
       })

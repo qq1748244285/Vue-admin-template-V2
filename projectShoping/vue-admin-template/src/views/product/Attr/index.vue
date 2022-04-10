@@ -1,7 +1,7 @@
 <!--
  * @Author: WenBin
  * @Date: 2022-04-04 13:48:57
- * @LastEditTime: 2022-04-08 16:32:40
+ * @LastEditTime: 2022-04-10 17:36:19
  * @LastEditors: your name
  * @Description: 
  * @FilePath: \vue-admin-template\src\views\product\Attr\index.vue
@@ -33,9 +33,9 @@
               </template>
             </el-table-column>
             <el-table-column prop="prop" label="操作" width="150" align="center">
-              <template slot-scope="{row}">
+              <template slot-scope="{row,$index}">
                 <el-button @click="SubMitClick('edit',row)" type="warning" icon="el-icon-edit" size="mini"></el-button>
-                <el-button @click="SubMitClick('delete',row)" type="danger" icon="el-icon-delete" size="mini"></el-button>
+                <el-button @click="deleteRow(row,$index)" type="danger" icon="el-icon-delete" size="mini"></el-button>
               </template>
             </el-table-column>
           </el-table>
@@ -53,19 +53,21 @@
           <el-table :data="attrInfo.attrValueList" border style="width: 100% margin:20px 0">
             <el-table-column type="index" label="序号" align="center" width="80"></el-table-column>
             <el-table-column label="属性值名称" width="width">
-              <template slot-scope="{row}">
-                <el-input :autofocus="true" v-if="row.flag" @keyup.enter.native="blurInputValue(row)" @blur="blurInputValue(row)" v-model="row.valueName" placeholder="请输入属性值" size="mini"></el-input>
-                <div v-else @click="row.flag=true">{{row.valueName}}</div>
+              <template slot-scope="{row,$index}">
+                <el-input :ref="$index" v-if="row.flag" @keyup.enter.native="blurInputValue(row)" @blur="blurInputValue(row)" v-model="row.valueName" placeholder="请输入属性值" size="mini"></el-input>
+                <div v-else @click="handlerSpanFocusInput(row,$index)">{{row.valueName}}</div>
               </template>
             </el-table-column>
             <el-table-column label="操作" width="width">
-              <template slot-scope="{row}">
-                <el-button type="danger" icon="el-icon-delete" size="mini"></el-button>
+              <template slot-scope="{row,$index}">
+                <el-popconfirm :title="`确定删除${row.valueName}吗?`" @onConfirm="sumbitRemove($index)" @onCancel="$msgInfo('已取消删除!!')">
+                  <el-button slot="reference" type="danger" icon="el-icon-delete" size="mini"></el-button>
+                </el-popconfirm>
               </template>
             </el-table-column>
           </el-table>
           <div class="Update-Btns-Box">
-            <el-button @click="SubMitAddOrEdit" type="primary">保存</el-button>
+            <el-button @click="SubMitAddOrEdit" type="primary" :disabled="attrInfo.attrValueList.length<1">保存</el-button>
             <el-button @click="SubMitClick('close')">取消</el-button>
           </div>
         </div>
@@ -96,17 +98,18 @@ export default {
   },
   methods: {
     SubMitClick(type, row) {
-      this.isShowTable = false;
       //3级分类id获取
       this.attrInfo.categoryId = this.levelList3;
-
+      this.isShowTable = false;
       switch (type) {
         case 'add':
-          this.$refs['CateGorySelect'].handlerSelectDis(true);
           break;
         case 'addValue':
           let temp = { attrId: this.attrInfo.id, valueName: '', flag: true };
           this.attrInfo.attrValueList.push(temp);
+          this.$nextTick(() => {
+            this.$refs[this.attrInfo.attrValueList.length - 1].focus();
+          })
           break;
         case 'close':
           this.isShowTable = true;
@@ -116,13 +119,14 @@ export default {
             categoryId: 0,
             categoryLevel: 3,
           };
+          this.$refs['CateGorySelect'].handlerSelectDis(false);
           break;
         case 'edit':
           this.isShowTable = false;
-          row.attrValueList.forEach(item => {
-            item.flag = false;
-          })
-          this.attrInfo = JSON.parse(JSON.stringify(row));
+          if (row.attrValueList?.length > 0) {
+            row.attrValueList.forEach(item => { this.$set(item, 'flag', false) });
+            this.attrInfo = JSON.parse(JSON.stringify(row));
+          }
           break;
         default:
           return
@@ -159,12 +163,14 @@ export default {
     },
     blurInputValue(row) {
       let { valueName } = row;
-      let isRepat = this.attrInfo.attrValueList.some((item) => {
-        if (row !== item) {
-          return valueName == item.valueName
-        }
-      });
-      isRepat ? this.$message.warning('不允许使用重复的名称') : trim(row.valueName) ? row.flag = false : this.$message.warning('请输入属性值名称');
+      if (trim(valueName)) {
+        let isRepat = this.attrInfo.attrValueList.some((item) => {
+          if (row !== item) {
+            return valueName == item.valueName
+          }
+        });
+        isRepat ? this.$message.warning('不允许使用重复的名称') : trim(row.valueName) ? this.$set(row, 'flag', false) : this.$message.warning('请输入属性值名称');
+      }
     },
     async SubMitAddOrEdit() {
       //属性名及添加项不能为空
@@ -177,8 +183,8 @@ export default {
           if (Notempty) {
             let result = await this.$proApi.Attr.addAttribute(this.attrInfo);
             if (result.code == 200) {
-              this.$message.success('新增成功!');
-              this.isShowTable = true ; 
+              this.$message.success('成功!');
+              this.isShowTable = true;
               this.getListData();
             }
           } else {
@@ -191,6 +197,46 @@ export default {
         this.$message.warning('属性名不能为空!')
       }
     },
+    deleteRow(row, index) {
+      console.log(row, 'row删除..');
+      this.$confirm('此操作将永久删除该属性, 是否继续?', '提示', {
+        confirmButtonText: '确定',
+        cancelButtonText: '取消',
+        type: 'warning'
+      }).then(async () => {
+        let res = await this.$proApi.Attr.DeleteAttribute(row.id);
+        if (res.code == 200) {
+          console.log(this.attrInfo.attrValueList, '????', index, '.ijasdiojindex');
+          this.$nextTick(() => {
+            this.arrList.splice(index, 1);//数组中剔除该项
+            this.$msgSucc('删除成功!');
+          })
+        } else {
+          this.$msgError('删除失败');
+        }
+      }).catch((err) => {
+        console.log(err, '??')
+        this.$msgInfo('已取消删除!')
+      });
+    },
+    EditshowInput(row) {
+      console.log(row, '修改显示隐藏')
+    },
+    handlerSpanFocusInput(row, index) {
+      row.flag = true;
+      this.$nextTick(() => {
+        this.$refs[index].focus()
+      })
+    },
+    sumbitRemove(index) {
+      this.attrInfo.attrValueList.splice(index, 1);
+      this.$msgSucc('删除成功!');
+    }
+  },
+  watch: {
+    isShowTable(val, newVal) {
+      this.$refs['CateGorySelect'].handlerSelectDis(!val);
+    }
   }
 }
 </script>

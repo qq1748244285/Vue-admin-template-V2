@@ -43,4 +43,12 @@ export function addAttribute(data) {
   })
 }
 
+//删除
+export function DeleteAttribute(attrId){
+  return request({
+    url:`/admin/product/deleteAttr/${attrId}`,
+    method:'delete'
+  })
+}
+
 
