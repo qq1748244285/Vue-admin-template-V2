@@ -1,7 +1,7 @@
 <!--
  * @Author: WenBin
  * @Date: 2022-04-04 13:49:33
- * @LastEditTime: 2022-04-10 20:15:33
+ * @LastEditTime: 2022-04-11 16:28:18
  * @LastEditors: your name
  * @Description: 
  * @FilePath: \vue-admin-template\src\views\product\Spu\index.vue
@@ -30,7 +30,7 @@
         </el-table>
         <el-pagination style="textAlign:center;" @size-change="handleSizeChange" @current-change="getSpuList" :current-page="page" :page-sizes="[3, 5,10]" :page-size="limit" layout="prev, pager, next, jumper,->,sizes,total" :total="total"></el-pagination>
       </div>
-      <SpuForm v-show="scene===1"></SpuForm>
+      <SpuForm ref="SpuForm" v-if="scene===1" @changeScene="changeScene"></SpuForm>
       <SkuForm v-show="scene===2"></SkuForm>
     </el-card>
   </div>
@@ -56,22 +56,37 @@ export default {
       limit: 3,
       tableData: [],
       total: 0,
-      scene: 1, //0代表展示SPU列表数据 1添加与修改SPU  2添加SKU
+      scene: 0, //0代表展示SPU列表数据 1添加与修改SPU  2添加SKU
     }
   },
   // 计算属性
   computed: {},
   // 侦听器
-  watch: {},
+  watch: {
+    //控制3级菜单可用状态
+    scene(value, newValue) {
+      if (value != 0) {
+        this.$refs.CateGorySelect.handlerSelectDis(true)
+      }else{
+        this.$refs.CateGorySelect.handlerSelectDis(false)
+      }
+    }
+  },
   // 组件方法
   methods: {
+    changeScene(scene) {
+      this.scene = scene;
+    },
     handleAddSku(row) {
       console.log('addSku..');
       this.scene = 2;
     },
     handleEdit(row) {
-      console.log('edit..');
+      console.log('edit..', row);
       this.scene = 1;
+      this.$nextTick(() => {
+        this.$refs.SpuForm.init(row);
+      })
     },
     handleAddSpu() {
       console.log('点击添加..');

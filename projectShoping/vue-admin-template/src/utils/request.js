@@ -3,6 +3,9 @@ import { MessageBox, Message } from 'element-ui'
 import store from '@/store'
 import { getToken } from '@/utils/auth'
 
+import NProgress from 'nprogress' // progress bar
+import 'nprogress/nprogress.css' // progress bar style
+
 // create an axios instance
 const service = axios.create({
   baseURL: process.env.VUE_APP_BASE_API, // url = base url + request url
@@ -21,11 +24,14 @@ service.interceptors.request.use(
       // please modify it according to the actual situation
       config.headers['token'] = getToken()
     }
+    //进度条开始加载
+    NProgress.start();
     return config
   },
   error => {
     // do something with request error
     console.log(error) // for debug
+    NProgress.done();
     return Promise.reject(error)
   }
 )
@@ -67,8 +73,11 @@ service.interceptors.response.use(
           })
         })
       }
+
+      NProgress.done();
       return Promise.reject(new Error(res.message || 'Error'))
     } else {
+      NProgress.done();
       return res
     }
   },
@@ -79,6 +88,7 @@ service.interceptors.response.use(
       type: 'error',
       duration: 5 * 1000
     })
+    NProgress.done();
     return Promise.reject(error)
   }
 )
