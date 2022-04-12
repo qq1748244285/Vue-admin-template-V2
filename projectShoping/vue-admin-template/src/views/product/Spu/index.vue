@@ -1,7 +1,7 @@
 <!--
  * @Author: WenBin
  * @Date: 2022-04-04 13:49:33
- * @LastEditTime: 2022-04-12 14:48:57
+ * @LastEditTime: 2022-04-12 16:50:10
  * @LastEditors: your name
  * @Description: 
  * @FilePath: \vue-admin-template\src\views\product\Spu\index.vue
@@ -76,6 +76,8 @@ export default {
   methods: {
     changeScene(scene) {
       this.scene = scene;
+      //重新获取数据
+      this.getSpuList(this.page);
     },
     handleAddSku(row) {
       console.log('addSku..');
@@ -89,8 +91,11 @@ export default {
       })
     },
     handleAddSpu() {
-      console.log('点击添加..');
+      console.log('addSpu..');
       this.scene = 1;
+      this.$nextTick(() => {
+        this.$refs.SpuForm.initAdd(this.categoryId3);
+      })
     },
     handleSizeChange(size) {
       this.limit = size;
@@ -125,7 +130,7 @@ export default {
   },
   created() {
   },
-  mounted() {
+   mounted() { 
   },
 }
 </script> 

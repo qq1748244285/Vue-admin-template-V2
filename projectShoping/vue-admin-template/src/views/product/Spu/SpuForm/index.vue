@@ -1,7 +1,7 @@
 <!--
  * @Author: WenBin
  * @Date: 2022-04-10 20:04:14
- * @LastEditTime: 2022-04-12 15:00:49
+ * @LastEditTime: 2022-04-12 16:50:23
  * @LastEditors: your name
  * @Description: 
  * @FilePath: \vue-admin-template\src\views\product\Spu\SpuForm\index.vue
@@ -83,9 +83,9 @@ export default {
       SpuInfo: {
         category3Id: 0,
         description: "",
-        id: 0,
+        id:undefined,
         spuName: "",
-        tmId: 0,
+        tmId:'',
         spuImageList: [
         ],
         spuSaleAttrList: [
@@ -119,7 +119,7 @@ export default {
       let SpuInfo = await this.$proApi.Spu.reqSpuInfo(id);
       let TradeMarkList = await this.$proApi.Spu.reqTradeMarkList();
       let ImageList = await this.$proApi.Spu.reqSpuImageList(id);
-      let SellSelectList = await this.$proApi.Spu.reqSellSelectList(id);
+      let SellSelectList = await this.$proApi.Spu.reqSellSelectList();
       if (SpuInfo.code == 200) {
         //遍历子属性 
         this.SpuInfo = SpuInfo.data;
@@ -134,6 +134,16 @@ export default {
       };
       if (SellSelectList.code == 200) { this.SellSelectList = SellSelectList.data };
       this.imageLoadingEnd = false;
+
+    },
+    async initAdd(category3Id) {
+      this.SpuInfo.category3Id = category3Id;
+      let TradeMarkList = await this.$proApi.Spu.reqTradeMarkList();
+      let SellSelectList = await this.$proApi.Spu.reqSellSelectList();
+      if (TradeMarkList.code == 200) { this.TradeMarkList = TradeMarkList.data; };
+      if (SellSelectList.code == 200) { this.SellSelectList = SellSelectList.data };
+      this.imageLoadingEnd = false; //加载end
+      console.log('加载完毕...')
 
     },
     //保存/修改
@@ -158,7 +168,7 @@ export default {
         console.log(result, 'Save,result...');
         this.$msgSucc('修改成功!');
         this.$emit('changeScene', 0);
-      }else{
+      } else {
         this.$msgError('修改失败!');
       }
 
