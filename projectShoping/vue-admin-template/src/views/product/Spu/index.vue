@@ -1,7 +1,7 @@
 <!--
  * @Author: WenBin
  * @Date: 2022-04-04 13:49:33
- * @LastEditTime: 2022-04-11 16:28:18
+ * @LastEditTime: 2022-04-12 14:48:57
  * @LastEditors: your name
  * @Description: 
  * @FilePath: \vue-admin-template\src\views\product\Spu\index.vue
@@ -67,7 +67,7 @@ export default {
     scene(value, newValue) {
       if (value != 0) {
         this.$refs.CateGorySelect.handlerSelectDis(true)
-      }else{
+      } else {
         this.$refs.CateGorySelect.handlerSelectDis(false)
       }
     }
@@ -125,7 +125,7 @@ export default {
   },
   created() {
   },
-  async mounted() {
+  mounted() {
   },
 }
 </script> 

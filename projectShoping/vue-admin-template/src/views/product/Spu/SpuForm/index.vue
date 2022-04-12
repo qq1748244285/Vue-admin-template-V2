@@ -1,7 +1,7 @@
 <!--
  * @Author: WenBin
  * @Date: 2022-04-10 20:04:14
- * @LastEditTime: 2022-04-11 17:33:05
+ * @LastEditTime: 2022-04-12 15:00:49
  * @LastEditors: your name
  * @Description: 
  * @FilePath: \vue-admin-template\src\views\product\Spu\SpuForm\index.vue
@@ -42,17 +42,17 @@
           <el-table-column prop="saleAttrName" label="属性名" width="width"></el-table-column>
           <el-table-column label="属性值名称列表" width="width">
             <template slot-scope="{row,$index}">
-              <el-tag :key="tag.id" v-for="tag in row.spuSaleAttrValueList" closable :disable-transitions="false" @close="handleClose(tag)">
+              <el-tag :key="tag.id" v-for="tag in row.spuSaleAttrValueList" closable :disable-transitions="false" @close="handleClose(row,tag,$index)">
                 {{tag.saleAttrValueName}}
               </el-tag>
-              <el-input class="input-new-tag" v-if="row.inputVisible" v-model="row.inputValue" :ref="$index" size="small" @keyup.enter.native="handleInputConfirm(row,$index)" @blur="handleInputConfirm(row,$index)">
+              <el-input class="input-new-tag" v-if="row.inputVisible" v-model="row.inputValue" :ref="$index" size="small" @keyup.enter.native="$event.target.blur" @blur="handleInputConfirm(row,$index)">
               </el-input>
               <el-button v-else class="button-new-tag" size="small" @click="showInput(row,$index)">添加</el-button>
             </template>
           </el-table-column>
           <el-table-column label="操作" width="width">
             <template slot-scope="{row,$index}">
-              <el-button type="danger" icon="el-icon-delete"></el-button>
+              <el-button type="danger" icon="el-icon-delete" @click="deleteRow(row,$index)"></el-button>
             </template>
           </el-table-column>
         </el-table>
@@ -66,6 +66,7 @@
 </template>
 
 <script>
+import trim from 'lodash/trim';
 export default {
   // 组件名称
   name: 'SpuForm',
@@ -106,7 +107,6 @@ export default {
           return item.name !== InfoItem.saleAttrName
         })
       })
-      // return (this.SellSelectList.length + 1) - (this.SpuInfo.spuSaleAttrList.length + 1);
     }
   },
   // 侦听器
@@ -136,8 +136,34 @@ export default {
       this.imageLoadingEnd = false;
 
     },
+    //保存/修改
+    async SubMitSave() {
+      console.log(this.SpuInfo, 'SpuInfo');
+      //整理照片墙参数 
+      let tempArr = this.tempImageList.map(item => {
+        return {
+          imgUrl: (item.response && item.response.data) || item.url,
+          imgName: item.name
+        }
+      });
+      //如果新增图片
+      if (tempArr?.length > 0) {
+        this.SpuInfo.spuImageList = tempArr;
+      } else {
+        console.log('未新增图片');
+      };
+
+      let result = await this.$proApi.Spu.reqAddOrUpdateSpu(this.SpuInfo);
+      if (result.code == 200) {
+        console.log(result, 'Save,result...');
+        this.$msgSucc('修改成功!');
+        this.$emit('changeScene', 0);
+      }else{
+        this.$msgError('修改失败!');
+      }
+
+    },
     addSellState() {
-      console.log('添加属性..', this.attrIdAndAttrName);
       //分割出name和id
       let [baseSaleAttrId, saleAttrName] = this.attrIdAndAttrName.split('+');
       //创建一个属性对象
@@ -149,7 +175,6 @@ export default {
       this.SpuInfo.spuSaleAttrList.push(temp);
       //清空数据
       this.attrIdAndAttrName = '';
-      console.log(temp, 'temp..')
     },
     handleRemove(file, fileList) {
       console.log(file, fileList);
@@ -158,9 +183,6 @@ export default {
     imageSuccessUp(response, file, fileList) {
       this.tempImageList = fileList; //临时保存图片组用于后续保存使用
     },
-    SubMitSave() {
-
-    },
     closeAndBack() {
       this.$emit('changeScene', 0);
     },
@@ -168,8 +190,11 @@ export default {
       this.dialogImageUrl = file.url;
       this.dialogVisible = true;
     },
-    handleClose(tag) {
-      // this.dynamicTags.splice(this.dynamicTags.indexOf(tag), 1);
+    handleClose(row, tag, index) {
+      row.spuSaleAttrValueList.splice(index, 1);
+    },
+    deleteRow(row, index) {
+      this.SpuInfo.spuSaleAttrList.splice(index, 1);
     },
     showInput(row, index) {
       this.$set(row, 'inputVisible', true);
@@ -179,25 +204,16 @@ export default {
       });
     },
     handleInputConfirm(row, index) {
-      if (row.inputValue.trim() == '') {
-        return this.$msgError('属性值不能为空!');
-      };
-
-      //属性名不可重复
-      let result = row.spuSaleAttrValueList.every(item => item.saleAttrValueName == inputValue);
-
-      if (!result) {
-        return this.$msgError('属性名不可重复!');
-      };
+      console.log('触发频率..')
 
       let { baseSaleAttrId, inputValue } = row;
-      let temp = {
-        baseSaleAttrId,
-        saleAttrValueName: inputValue
-      };
-      row.spuSaleAttrValueList.push(temp);
-      row.inputVisible = false;//隐藏
-    }
+      if (inputValue.trim() == '') { return this.$msgError('属性值不能为空!'); };
+      let result = row.spuSaleAttrValueList.every(item => trim(item.saleAttrValueName) !== trim(inputValue));
+      //判断名称重复
+      if (!result) { return this.$msgError('与其他属性值名称重复!') }
+      row.spuSaleAttrValueList.push({ baseSaleAttrId, saleAttrValueName: inputValue });
+      row.inputVisible = false;
+    },
   },
   created() {
   },

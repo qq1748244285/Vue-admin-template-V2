@@ -14,3 +14,12 @@ export function reqSpuImageList(spuId) { return request({ url: `/admin/product/s
 
 //获取销售信息
 export function reqSellSelectList() { return request({ url: `/admin/product/baseSaleAttrList` }) }
+
+//修改添加Spu 通过是否携带id区分
+export function reqAddOrUpdateSpu(data) {
+    if (data.id) {
+        return request({ url: `/admin/product/updateSpuInfo`, method: 'post', data })
+    } else {
+        return request({ url: `/admin/product/saveSpuInfo`, method: 'post', data })
+    }
+}
