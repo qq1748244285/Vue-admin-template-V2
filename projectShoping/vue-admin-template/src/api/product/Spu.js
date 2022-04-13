@@ -23,3 +23,6 @@ export function reqAddOrUpdateSpu(data) {
         return request({ url: `/admin/product/saveSpuInfo`, method: 'post', data })
     }
 }
+
+//删除Spu
+export function deleteSpu(spuId) { return request({ url: `/admin/product/deleteSpu/${spuId}`, method: 'delete' }) }

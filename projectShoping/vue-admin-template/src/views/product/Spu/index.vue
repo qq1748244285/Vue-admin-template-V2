@@ -1,7 +1,7 @@
 <!--
  * @Author: WenBin
  * @Date: 2022-04-04 13:49:33
- * @LastEditTime: 2022-04-12 16:50:10
+ * @LastEditTime: 2022-04-13 16:48:33
  * @LastEditors: your name
  * @Description: 
  * @FilePath: \vue-admin-template\src\views\product\Spu\index.vue
@@ -24,7 +24,11 @@
               <tips-button @click="handleAddSku(row)" title="添加Spu" type="success" icon="el-icon-plus" size="mini"></tips-button>
               <tips-button @click="handleEdit(row)" title="修改Spu" type="warning" icon="el-icon-edit" size="mini"></tips-button>
               <tips-button title="查看当前spu全部sku列表" type="info" icon="el-icon-info" size="mini"></tips-button>
-              <tips-button title="删除spu" type="danger" icon="el-icon-delete" size="mini"></tips-button>
+              <el-popconfirm @onConfirm="removeSpu(row)" confirm-button-text='好的' cancel-button-text='不用了' icon="el-icon-question" icon-color="red" title="这是一段内容确定删除吗？">
+                <template slot="reference">
+                  <tips-button title="删除spu" type="danger" icon="el-icon-delete" size="mini"></tips-button>
+                </template>
+              </el-popconfirm>
             </template>
           </el-table-column>
         </el-table>
@@ -127,10 +131,25 @@ export default {
     clearLevelList(ids) {
       ids.forEach(id => { this['levelList' + id] = ''; })
     },
+    async removeSpu(row) {
+      console.log('row..remove', row);
+      let result = await this.$proApi.Spu.deleteSpu(row.id);
+      console.log(this.page, '当前页码');
+      if (result.code == 200) {
+        this.$msgSucc('删除成功!');
+        if (this.tableData.length > 1 && this.page != 1) {
+          this.getSpuList(this.page);
+        } else {
+          this.getSpuList(this.page - 1);
+        }
+      } else {
+        this.$msgError('删除失败!')
+      }
+    }
   },
   created() {
   },
-   mounted() { 
+  mounted() {
   },
 }
 </script> 

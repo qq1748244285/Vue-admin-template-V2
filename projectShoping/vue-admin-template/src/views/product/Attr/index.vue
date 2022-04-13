@@ -1,7 +1,7 @@
 <!--
  * @Author: WenBin
  * @Date: 2022-04-04 13:48:57
- * @LastEditTime: 2022-04-10 17:36:19
+ * @LastEditTime: 2022-04-13 15:35:28
  * @LastEditors: your name
  * @Description: 
  * @FilePath: \vue-admin-template\src\views\product\Attr\index.vue
@@ -206,7 +206,6 @@ export default {
       }).then(async () => {
         let res = await this.$proApi.Attr.DeleteAttribute(row.id);
         if (res.code == 200) {
-          console.log(this.attrInfo.attrValueList, '????', index, '.ijasdiojindex');
           this.$nextTick(() => {
             this.arrList.splice(index, 1);//数组中剔除该项
             this.$msgSucc('删除成功!');
