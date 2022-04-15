@@ -1,7 +1,7 @@
 <!--
  * @Author: WenBin
  * @Date: 2022-04-04 13:49:33
- * @LastEditTime: 2022-04-13 16:48:33
+ * @LastEditTime: 2022-04-15 15:09:42
  * @LastEditors: your name
  * @Description: 
  * @FilePath: \vue-admin-template\src\views\product\Spu\index.vue
@@ -21,7 +21,7 @@
           <el-table-column prop="description" label="SPU描述" width="width"> </el-table-column>
           <el-table-column prop="prop" label="操作" width="width">
             <template slot-scope="{row,$index}">
-              <tips-button @click="handleAddSku(row)" title="添加Spu" type="success" icon="el-icon-plus" size="mini"></tips-button>
+              <tips-button @click="handleAddSku(row)" title="添加Sku" type="success" icon="el-icon-plus" size="mini"></tips-button>
               <tips-button @click="handleEdit(row)" title="修改Spu" type="warning" icon="el-icon-edit" size="mini"></tips-button>
               <tips-button title="查看当前spu全部sku列表" type="info" icon="el-icon-info" size="mini"></tips-button>
               <el-popconfirm @onConfirm="removeSpu(row)" confirm-button-text='好的' cancel-button-text='不用了' icon="el-icon-question" icon-color="red" title="这是一段内容确定删除吗？">
@@ -35,7 +35,7 @@
         <el-pagination style="textAlign:center;" @size-change="handleSizeChange" @current-change="getSpuList" :current-page="page" :page-sizes="[3, 5,10]" :page-size="limit" layout="prev, pager, next, jumper,->,sizes,total" :total="total"></el-pagination>
       </div>
       <SpuForm ref="SpuForm" v-if="scene===1" @changeScene="changeScene"></SpuForm>
-      <SkuForm v-show="scene===2"></SkuForm>
+      <SkuForm ref="SkuForm" v-show="scene===2" @changeScene="changeScene"></SkuForm>
     </el-card>
   </div>
 </template>
@@ -78,24 +78,28 @@ export default {
   },
   // 组件方法
   methods: {
-    changeScene(scene) {
+    changeScene(scene, request = true) {
       this.scene = scene;
       //重新获取数据
-      this.getSpuList(this.page);
+      if (request) {
+        this.getSpuList(this.page);
+      } else {
+        console.log('不请求..')
+      }
     },
     handleAddSku(row) {
-      console.log('addSku..');
       this.scene = 2;
+      this.$nextTick(() => {
+        this.$refs.SkuForm.init(row, this.categoryId1, this.categoryId2, this.categoryId3);
+      })
     },
     handleEdit(row) {
-      console.log('edit..', row);
       this.scene = 1;
       this.$nextTick(() => {
         this.$refs.SpuForm.init(row);
       })
     },
     handleAddSpu() {
-      console.log('addSpu..');
       this.scene = 1;
       this.$nextTick(() => {
         this.$refs.SpuForm.initAdd(this.categoryId3);
@@ -132,9 +136,7 @@ export default {
       ids.forEach(id => { this['levelList' + id] = ''; })
     },
     async removeSpu(row) {
-      console.log('row..remove', row);
       let result = await this.$proApi.Spu.deleteSpu(row.id);
-      console.log(this.page, '当前页码');
       if (result.code == 200) {
         this.$msgSucc('删除成功!');
         if (this.tableData.length > 1 && this.page != 1) {

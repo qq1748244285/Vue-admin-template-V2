@@ -1,59 +1,26 @@
 <template>
   <div class="login-container">
-    <el-form
-      ref="loginForm"
-      :model="loginForm"
-      :rules="loginRules"
-      class="login-form"
-      auto-complete="on"
-      label-position="left"
-    >
+    <el-form ref="loginForm" :model="loginForm" :rules="loginRules" class="login-form" auto-complete="on" label-position="left">
       <div class="title-container">
-        <h3 class="title">CS - GO</h3>
+        <h3 class="title">Private Program</h3>
       </div>
       <el-form-item prop="username">
         <span class="svg-container">
           <svg-icon icon-class="user" />
         </span>
-        <el-input
-          ref="username"
-          v-model="loginForm.username"
-          placeholder="Username"
-          name="username"
-          type="text"
-          tabindex="1"
-          auto-complete="on"
-        />
+        <el-input ref="username" v-model="loginForm.username" placeholder="Username" name="username" type="text" tabindex="1" auto-complete="on" />
       </el-form-item>
 
       <el-form-item prop="password">
         <span class="svg-container">
           <svg-icon icon-class="password" />
         </span>
-        <el-input
-          :key="passwordType"
-          ref="password"
-          v-model="loginForm.password"
-          :type="passwordType"
-          placeholder="Password"
-          name="password"
-          tabindex="2"
-          auto-complete="on"
-          @keyup.enter.native="handleLogin"
-        />
+        <el-input :key="passwordType" ref="password" v-model="loginForm.password" :type="passwordType" placeholder="Password" name="password" tabindex="2" auto-complete="on" @keyup.enter.native="handleLogin" />
         <span class="show-pwd" @click="showPwd">
-          <svg-icon
-            :icon-class="passwordType === 'password' ? 'eye' : 'eye-open'"
-          />
+          <svg-icon :icon-class="passwordType === 'password' ? 'eye' : 'eye-open'" />
         </span>
       </el-form-item>
-      <el-button
-        :loading="loading"
-        type="primary"
-        style="width: 100%; margin-bottom: 30px"
-        @click.native.prevent="handleLogin"
-        >Rush B</el-button
-      >
+      <el-button :loading="loading" type="primary" style="width: 100%; margin-bottom: 30px" @click.native.prevent="handleLogin">Sign in</el-button>
       <div class="tips">
         <span style="margin-right: 20px">username: admin</span>
         <span> password: any</span>
@@ -69,6 +36,9 @@ export default {
   name: "Login",
   data() {
     const validateUsername = (rule, value, callback) => {
+      if(!value){
+        return callback(new Error('用户名不能为空!'));
+      }
       if (!validUsername(value)) {
         callback(new Error("Please enter the correct user name"));
       } else {
@@ -89,7 +59,7 @@ export default {
       },
       loginRules: {
         username: [
-          { required: true, trigger: "blur", validator: validateUsername },
+          {trigger: "blur", validator: validateUsername },
         ],
         password: [
           { required: true, trigger: "blur", validator: validatePassword },
@@ -161,8 +131,9 @@ $cursor: #fff;
 
 /* reset element-ui css */
 .login-container {
-  background: url(~@/assets/banner.jpeg);
+  background: url(~@/assets/banner.jpg);
   background-size: 100% 100%;
+  background-repeat: no-repeat;
   .el-input {
     display: inline-block;
     height: 47px;

@@ -1,17 +1,5 @@
 
-//引入必要组件
-import Search from '@/pages/Search'
-import Register from '@/pages/Register'
-import Login from '@/pages/Login'
-import Details from '@/pages/Details'
-import AddCartSuccess from '@/pages/AddCartSuccess'
-import ShopCart from '@/pages/ShopCart'
-import Trade from '@/pages/Trade'
-import Pay from '@/pages/Pay'
-import PaySuccess from '@/pages/PaySuccess'
-import center from '@/pages/Center'
-import myOrder from '@/pages/Center/myOrder'
-import groupOrder from '@/pages/Center/groupOrder'
+//引入必要组件 
 export default [
     {
         path: '/',
