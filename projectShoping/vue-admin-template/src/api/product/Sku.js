@@ -23,3 +23,33 @@ export function saveAddSkuInfo(data) {
     data
   })
 }
+
+//查看Sku列表 dialog
+export function getSkuList(spuId) {
+  return request({
+    url: `/admin/product/findBySpuId/${spuId}`
+  })
+}
+
+//获取Sku列表 
+export function reqSkuListTable(page, limit) {
+  return request({
+    url: `/admin/product/list/${page}/${limit}`
+  })
+}
+
+//更改商品上下架状态
+export function ChangeSaleState(skuId, type) {
+  if (type) {
+    return request({ url: `/admin/product/onSale/${skuId}` })
+  } else {
+    return request({ url: `/admin/product/cancelSale/${skuId}` })
+  }
+}
+
+//获得Sku详情
+export function reqSkuInfo(skuId) {
+  return request({
+    url: `/admin/product/getSkuById/${skuId}`
+  })
+}

@@ -1,7 +1,7 @@
 <!--
  * @Author: WenBin
  * @Date: 2022-04-04 13:49:33
- * @LastEditTime: 2022-04-15 15:09:42
+ * @LastEditTime: 2022-04-17 19:34:37
  * @LastEditors: your name
  * @Description: 
  * @FilePath: \vue-admin-template\src\views\product\Spu\index.vue
@@ -23,7 +23,7 @@
             <template slot-scope="{row,$index}">
               <tips-button @click="handleAddSku(row)" title="添加Sku" type="success" icon="el-icon-plus" size="mini"></tips-button>
               <tips-button @click="handleEdit(row)" title="修改Spu" type="warning" icon="el-icon-edit" size="mini"></tips-button>
-              <tips-button title="查看当前spu全部sku列表" type="info" icon="el-icon-info" size="mini"></tips-button>
+              <tips-button @click="ShowSkuList(row)" title="查看当前spu全部sku列表" type="info" icon="el-icon-info" size="mini"></tips-button>
               <el-popconfirm @onConfirm="removeSpu(row)" confirm-button-text='好的' cancel-button-text='不用了' icon="el-icon-question" icon-color="red" title="这是一段内容确定删除吗？">
                 <template slot="reference">
                   <tips-button title="删除spu" type="danger" icon="el-icon-delete" size="mini"></tips-button>
@@ -37,6 +37,19 @@
       <SpuForm ref="SpuForm" v-if="scene===1" @changeScene="changeScene"></SpuForm>
       <SkuForm ref="SkuForm" v-show="scene===2" @changeScene="changeScene"></SkuForm>
     </el-card>
+    <!-- 显示Sku列表的dialog -->
+    <el-dialog :title="SpuTitle" :visible.sync="ShowSkuVisible" :before-close="closeDialog">
+      <el-table :data="SkuList" v-loading="loading">
+        <el-table-column property="skuName" label="名称" width="width" align="center"></el-table-column>
+        <el-table-column property="price" label="价格" width="width" align="center"></el-table-column>
+        <el-table-column property="weight" label="重量" width="width" align="center"></el-table-column>
+        <el-table-column label="默认图片" width="width" align="center">
+          <template slot-scope="{row}">
+            <el-image style="width: 100px; height: 100px" :src="row.skuDefaultImg"></el-image>
+          </template>
+        </el-table-column>
+      </el-table>
+    </el-dialog>
   </div>
 </template>
 
@@ -61,6 +74,10 @@ export default {
       tableData: [],
       total: 0,
       scene: 0, //0代表展示SPU列表数据 1添加与修改SPU  2添加SKU
+      ShowSkuVisible: false,
+      SkuList: [], //Sku列表
+      SpuTitle: '',//Spu标题
+      loading: false,
     }
   },
   // 计算属性
@@ -85,6 +102,27 @@ export default {
         this.getSpuList(this.page);
       } else {
         console.log('不请求..')
+      }
+    },
+    closeDialog(done){
+      //关闭对话框
+      this.SkuList = []; //清空数据
+      this.loading = true;
+      done();
+    },
+    async ShowSkuList(row) {
+      this.ShowSkuVisible = true;
+      this.SpuTitle = row.spuName + '的Sku列表';
+      let result = await this.$proApi.Sku.getSkuList(row.id);
+      if (result.code == 200) {
+        if (result.data?.length > 0) {
+          this.SkuList = result.data;
+        } else {
+          this.$message.warning('暂无Sku!');
+        }
+        this.loading = false;
+      } else {
+        this.$msgError('查询Sku列表失败!');
       }
     },
     handleAddSku(row) {
