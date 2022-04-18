@@ -1,7 +1,7 @@
 <!--
  * @Author: WenBin
  * @Date: 2022-04-04 13:49:32
- * @LastEditTime: 2022-04-17 20:48:03
+ * @LastEditTime: 2022-04-18 17:27:02
  * @LastEditors: your name
  * @Description: 
  * @FilePath: \vue-admin-template\src\views\product\Sku\index.vue
@@ -12,8 +12,8 @@
     <!-- 表格 -->
     <el-table border :data="records" style="width: 100%">
       <el-table-column type="index" label="序号" width="80" align="center"></el-table-column>
-      <el-table-column prop="skuName" label="名称" width="width" align="center"></el-table-column>
-      <el-table-column prop="skuDesc" label="描述" width="width" align="center"></el-table-column>
+      <el-table-column prop="skuName" label="名称" width="80" align="center"></el-table-column>
+      <el-table-column prop="skuDesc" label="描述" width="100" align="center"></el-table-column>
       <el-table-column label="默认图片" width="width" align="center">
         <template slot-scope="{row}">
           <el-image style="width: 100px; height: 100px" :src="row.skuDefaultImg"></el-image>
