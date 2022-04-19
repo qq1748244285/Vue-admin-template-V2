@@ -1,7 +1,7 @@
 <!--
  * @Author: WenBin
  * @Date: 2022-04-18 10:53:52
- * @LastEditTime: 2022-04-19 15:45:55
+ * @LastEditTime: 2022-04-19 15:50:38
  * @LastEditors: your name
  * @Description: 
  * @FilePath: \vue-admin-template\src\views\dashboard\Sale\index.vue
@@ -135,7 +135,7 @@ export default {
     },
     'chartsList': {
       handler(newValue) {
-        console.log(newValue, '有数据啦');
+        console.log(newValue, 'watch支持异步 如果发现获取到了数据 则进行数据初始化');
         let option = {
           tooltip: {
             trigger: 'axis',

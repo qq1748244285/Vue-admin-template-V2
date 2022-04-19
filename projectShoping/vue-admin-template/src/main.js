@@ -23,7 +23,8 @@ import '@/permission' // permission control
  * Currently MockJs will be used in the production environment,
  * please remove it before going online ! ! !
  */
-if (process.env.NODE_ENV === 'production') {
+if (process.env.NODE_ENV === 'development') {
+  //只在开发环境下 使用mockXHR 避免登陆接口响应超时
   const { mockXHR } = require('../mock')
   mockXHR()
 }
@@ -38,6 +39,11 @@ Vue.config.productionTip = false
 //将封装的api 挂载到vue原型上方便调用
 import proApi from '@/api/product/index'
 Vue.prototype.$proApi = proApi;
+
+//将权限相关api 挂载
+import rApi from '@/api/acl/index';
+Vue.prototype.$rApi = rApi;
+console.log(rApi,'rapi')
 
 //二次封装message方法
 Vue.prototype.$msgSucc = function (message) { this.$message({ showClose: true, message, type: 'success' }); }
