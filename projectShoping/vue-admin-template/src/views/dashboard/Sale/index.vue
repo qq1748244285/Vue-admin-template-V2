@@ -1,7 +1,7 @@
 <!--
  * @Author: WenBin
  * @Date: 2022-04-18 10:53:52
- * @LastEditTime: 2022-04-18 16:38:37
+ * @LastEditTime: 2022-04-19 15:45:55
  * @LastEditors: your name
  * @Description: 
  * @FilePath: \vue-admin-template\src\views\dashboard\Sale\index.vue
@@ -39,7 +39,7 @@
       <div class="card-main">
         <el-row :gutter="10">
           <el-col :span="18">
-            <LeftCharts ref="chartsFormLeft" :title="title" :typeName="typeName" :data="data"></LeftCharts>
+            <LeftCharts ref="chartsFormLeft"></LeftCharts>
           </el-col>
           <el-col :span="6" class="right-col">
             <div class="right-content">
@@ -58,7 +58,7 @@
             </div>
           </el-col>
         </el-row>
-      </div> 
+      </div>
     </el-card>
   </div>
 </template>
@@ -66,6 +66,8 @@
 <script>
 import LeftCharts from './LeftCharts'
 import dayjs from 'dayjs'
+//引入getters
+import { mapGetters } from 'vuex'
 export default {
   // 组件名称
   name: 'Sale',
@@ -80,29 +82,60 @@ export default {
     return {
       activeName: 'sale',
       dateTime: [],
-      title: '销售额',
-      typeName: '销售',
-      data: [10, 20, 30, 40, 35, 30, 25, 20, 15, 10, 5, 50],
     }
   },
   // 计算属性
-  computed: {},
+  computed: {
+    ...mapGetters([
+      'chartsList'
+    ]),
+    title() {
+      return this.activeName == 'sale' ? '销售额' : '访问量'
+    },
+    typeName() {
+      return this.activeName == 'sale' ? '销售' : '访问'
+    },
+    xAxisData() {
+      return this.activeName == 'sale' ? this.chartsList.orderFullYearAxis : this.chartsList.userFullYearAxis;
+    },
+    seriesData() {
+      return this.activeName == 'sale' ? this.chartsList.orderFullYear : this.chartsList.userFullYear;
+    }
+  },
   // 侦听器
   watch: {
     'activeName': {
       immediate: true, //首次加载
       handler(newValue) {
-        let saleList = [10, 20, 30, 40, 35, 30, 25, 20, 15, 10, 5, 50];
-        let visitorList = [111, 222, 3333, 444, 355, 311, 212, 130, 130, 120, 10, 443];
-        if (newValue == 'sale') {
-          this.title = '销售额';
-          this.typeName = '销售';
-          this.data = saleList;
-        } else {
-          this.title = '访问量';
-          this.typeName = '访问';
-          this.data = visitorList;
+        let option = {
+          title: {
+            text: this.title + '趋势'
+          },
+          xAxis:
+          {
+            data: this.xAxisData,
+          },
+          yAxis:
+          {
+            data: []
+          },
+          series: [
+            {
+              name: this.typeName,
+              type: 'bar',
+              barWidth: '60%',
+              data: this.seriesData,
+            }
+          ]
         }
+        this.$nextTick(() => {
+          this.$refs.chartsFormLeft.init(option);
+        })
+      }
+    },
+    'chartsList': {
+      handler(newValue) {
+        console.log(newValue, '有数据啦');
         let option = {
           tooltip: {
             trigger: 'axis',
@@ -122,7 +155,7 @@ export default {
           xAxis: [
             {
               type: 'category',
-              data: ['一月', '二月', '三月', '四月', '五月', '六月', '七月', '八月', '九月', '十月', '十一月', '十二月'],
+              data: this.xAxisData,
               axisTick: {
                 alignWithLabel: true
               }
@@ -138,13 +171,11 @@ export default {
               name: this.typeName,
               type: 'bar',
               barWidth: '60%',
-              data: this.data,
+              data: this.seriesData,
             }
           ]
         };
-        this.$nextTick(() => {
-          this.$refs.chartsFormLeft.init(option);
-        })
+        this.$refs.chartsFormLeft.init(option);
       }
     }
   },
@@ -192,28 +223,24 @@ export default {
   },
 }
 </script> 
-
-<style>
-.text {
-  font-size: 14px;
-}
-
-.item {
-  margin-bottom: 18px;
-}
-
-.el-card__header {
-  border-bottom: 0;
-}
-
-.box-card {
-  margin-top: 20px;
-}
-</style>
-
+ 
 
 <style scoped lang="scss">
 .Sale {
+  ::v-deep.el-card__header {
+    border-bottom: 0;
+  }
+  .text {
+    font-size: 14px;
+  }
+
+  .item {
+    margin-bottom: 18px;
+  }
+
+  .box-card {
+    margin-top: 20px;
+  }
   .card-header {
     display: flex;
     justify-content: space-between;

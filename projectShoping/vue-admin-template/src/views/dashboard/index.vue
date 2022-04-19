@@ -1,7 +1,7 @@
 <!--
  * @Author: WenBin
  * @Date: 2022-04-02 13:01:54
- * @LastEditTime: 2022-04-18 16:34:03
+ * @LastEditTime: 2022-04-19 14:36:00
  * @LastEditors: your name
  * @Description: 
  * @FilePath: \vue-admin-template\src\views\dashboard\index.vue
@@ -24,10 +24,13 @@ export default {
   name: 'Dashboard',
   computed: {
     ...mapGetters([
-      'name'
-    ])
+      'name',
+    ]),
   },
-  components: { Card, Sale, Observe }
+  components: { Card, Sale, Observe },
+  mounted() {
+    this.$store.dispatch('getCharts'); //派发actions获取首页图表数据 -mock
+  },
 }
 </script>
 

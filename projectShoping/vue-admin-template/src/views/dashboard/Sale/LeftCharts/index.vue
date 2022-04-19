@@ -1,7 +1,7 @@
 <!--
  * @Author: WenBin
  * @Date: 2022-04-18 14:21:25
- * @LastEditTime: 2022-04-18 15:27:25
+ * @LastEditTime: 2022-04-19 14:57:22
  * @LastEditors: your name
  * @Description: 
  * @FilePath: \vue-admin-template\src\views\dashboard\Sale\LeftCharts\index.vue
@@ -38,14 +38,13 @@ export default {
   },
   mounted() {
     //挂载charts
-    //初始化charts实例
-
+    //初始化charts实例 
   },
   methods: {
     init(option) {
       //初始化charts实例
       let LeftCharts = echarts.init(this.$refs.LeftCharts);
-      LeftCharts.setOption(option);
+      LeftCharts.setOption(option);  
     }
   }
 }

@@ -1,7 +1,7 @@
 <!--
  * @Author: WenBin
  * @Date: 2022-04-18 16:32:28
- * @LastEditTime: 2022-04-18 16:41:11
+ * @LastEditTime: 2022-04-19 09:42:49
  * @LastEditors: your name
  * @Description: 
  * @FilePath: \vue-admin-template\src\views\dashboard\Observe\index.vue
