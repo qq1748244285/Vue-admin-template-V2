@@ -1,12 +1,34 @@
 import { login, logout, getInfo } from '@/api/user'
 import { getToken, setToken, removeToken } from '@/utils/auth'
-import { resetRouter } from '@/router'
+import { resetRouter, asyncRoutes } from '@/router'
+
+
+
+// //获取异步路由列表 用于对比判断哪些路由应该显示
+const ValidateRouters = (asyncRoutes, routes) => {
+  return asyncRoutes.reduce((box, item) => {
+    if (routes.indexOf(item.name) != -1) {
+      if (item.children && item.children.length) {
+        item.children = ValidateRouters(item.children, routes);
+      }
+      box.push(item);
+    }
+    return box;
+  }, [])
+}
+
+
+
 
 const getDefaultState = () => {
   return {
     token: getToken(),
     name: '',
-    avatar: ''
+    avatar: '',
+    routes: [], //服务器返回的菜单信息[根据角色返回的标记-元素为字符串]
+    buttons: [],//服务器返回的按钮权限信息[元素为字符串]
+    roles: [],//角色信息
+    AsyncRoutes: [],//权限验证完毕后的路由列表
   }
 }
 
@@ -24,6 +46,19 @@ const mutations = {
   },
   SET_AVATAR: (state, avatar) => {
     state.avatar = avatar
+  },
+  SET_USER_INFO: (state, data) => {
+    state.name = data.name;
+    state.avatar = data.avatar;
+    //菜单权限标记
+    state.routes = data.routes;
+    //按钮权限标记
+    state.buttons = data.buttons;
+    //角色按钮标记
+    state.roles = data.roles;
+  },
+  SET_RESULT_ROUTERS: (state, result) => {
+    state.AsyncRoutes = result;
   }
 }
 
@@ -46,15 +81,13 @@ const actions = {
     return new Promise((resolve, reject) => {
       getInfo(state.token).then(response => {
         const { data } = response
-
         if (!data) {
           return reject('Verification failed, please Login again.')
         }
-
-        const { name, avatar } = data
-
-        commit('SET_NAME', name)
-        commit('SET_AVATAR', avatar)
+        const { name, avatar } = data;
+        //通过匹配计算出该角色下拥有的菜单和路由权限
+        commit('SET_RESULT_ROUTERS', ValidateRouters(asyncRoutes, data.routes));
+        commit('SET_USER_INFO', data);
         resolve(data)
       }).catch(error => {
         reject(error)
