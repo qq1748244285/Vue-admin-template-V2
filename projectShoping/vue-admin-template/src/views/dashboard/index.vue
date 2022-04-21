@@ -1,7 +1,7 @@
 <!--
  * @Author: WenBin
  * @Date: 2022-04-02 13:01:54
- * @LastEditTime: 2022-04-19 14:36:00
+ * @LastEditTime: 2022-04-21 14:18:40
  * @LastEditors: your name
  * @Description: 
  * @FilePath: \vue-admin-template\src\views\dashboard\index.vue
@@ -11,7 +11,7 @@
   <div class="dashboard-container">
     <Card />
     <Sale />
-    <Observe />
+    <Observe /> 
   </div>
 </template>
 
@@ -43,5 +43,5 @@ export default {
     font-size: 30px;
     line-height: 46px;
   }
-}
+} 
 </style>

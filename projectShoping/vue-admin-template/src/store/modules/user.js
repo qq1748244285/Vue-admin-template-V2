@@ -1,19 +1,20 @@
 import { login, logout, getInfo } from '@/api/user'
 import { getToken, setToken, removeToken } from '@/utils/auth'
-import { resetRouter, asyncRoutes } from '@/router'
+import { resetRouter, asyncRoutes, constantRoutes, anyRoutes } from '@/router'
 
-
+//引入路由
+import router from '@/router'
 
 // //获取异步路由列表 用于对比判断哪些路由应该显示
 const ValidateRouters = (asyncRoutes, routes) => {
   return asyncRoutes.reduce((box, item) => {
     if (routes.indexOf(item.name) != -1) {
       if (item.children && item.children.length) {
-        item.children = ValidateRouters(item.children, routes);
+        ValidateRouters(item.children, routes);
       }
-      box.push(item);
+      box.push(item)
     }
-    return box;
+    return box
   }, [])
 }
 
@@ -29,6 +30,7 @@ const getDefaultState = () => {
     buttons: [],//服务器返回的按钮权限信息[元素为字符串]
     roles: [],//角色信息
     AsyncRoutes: [],//权限验证完毕后的路由列表
+    AllRoutes: [], //普通列表 +  验证结束列表 + 错误路由  集合
   }
 }
 
@@ -58,7 +60,12 @@ const mutations = {
     state.roles = data.roles;
   },
   SET_RESULT_ROUTERS: (state, result) => {
-    state.AsyncRoutes = result;
+    state.AsyncRoutes = result; 
+
+    //拼接最终显示的完整路由列表 - 已根据权限鉴权处理后的路由列表
+    state.AllRoutes = [...constantRoutes,...result,  anyRoutes];
+    //向路由列表中添加处理后的路由
+    router.addRoutes(state.AllRoutes);
   }
 }
 

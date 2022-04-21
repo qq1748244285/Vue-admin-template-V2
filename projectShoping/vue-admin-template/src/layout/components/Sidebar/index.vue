@@ -1,3 +1,12 @@
+<!--
+ * @Author: WenBin
+ * @Date: 2022-04-02 13:01:54
+ * @LastEditTime: 2022-04-21 14:00:37
+ * @LastEditors: your name
+ * @Description: 
+ * @FilePath: \vue-admin-template\src\layout\components\Sidebar\index.vue
+ * @ascription 3xData
+-->
 <template>
   <div :class="{'has-logo':showLogo}">
     <logo v-if="showLogo" :collapse="isCollapse" />
@@ -31,7 +40,8 @@ export default {
       'sidebar'
     ]),
     routes() {
-      return this.$router.options.routes
+      return this.$store.state.user.AllRoutes; //鉴权后的路由列表
+      // return this.$router.options.routes  //不仅对常量路由进行遍历 同时遍历鉴权后路由列表
     },
     activeMenu() {
       const route = this.$route

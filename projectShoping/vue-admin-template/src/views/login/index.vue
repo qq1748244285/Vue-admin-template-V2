@@ -1,3 +1,12 @@
+<!--
+ * @Author: WenBin
+ * @Date: 2022-04-02 13:01:54
+ * @LastEditTime: 2022-04-21 14:06:36
+ * @LastEditors: your name
+ * @Description: 
+ * @FilePath: \vue-admin-template\src\views\login\index.vue
+ * @ascription 3xData
+-->
 <template>
   <div class="login-container">
     <el-form ref="loginForm" :model="loginForm" :rules="loginRules" class="login-form" auto-complete="on" label-position="left">
@@ -36,14 +45,17 @@ export default {
   name: "Login",
   data() {
     const validateUsername = (rule, value, callback) => {
-      if(!value){
+      if (!value) {
         return callback(new Error('用户名不能为空!'));
-      }
-      if (!validUsername(value)) {
-        callback(new Error("Please enter the correct user name"));
       } else {
-        callback();
+        callback()
       }
+      //不对管理名单 - 列表进行验证 -utils-validate
+      // if (!validUsername(value)) {
+      //   callback(new Error("Please enter the correct user name"));
+      // } else {
+      //   callback();
+      // }
     };
     const validatePassword = (rule, value, callback) => {
       if (value.length < 6) {
@@ -59,7 +71,7 @@ export default {
       },
       loginRules: {
         username: [
-          {trigger: "blur", validator: validateUsername },
+          { trigger: "blur", validator: validateUsername },
         ],
         password: [
           { required: true, trigger: "blur", validator: validatePassword },
